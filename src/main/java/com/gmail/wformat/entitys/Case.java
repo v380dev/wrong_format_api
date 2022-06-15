@@ -5,25 +5,17 @@ import java.util.List;
 import java.util.Objects;
 
 public class Case {
-//    private String name;
+    private String preFilter;
     private List<String> regExpList;
 
-    public Case(/*String name*/) {
-//        this.name = name;
+    public Case(String preFilter) {
+        this.preFilter = preFilter;
         this.regExpList = new ArrayList<>();
     }
 
-/*
-    public String getName() {
-        return name;
+    public String getPreFilter() {
+        return preFilter;
     }
-*/
-
-/*
-    public void setName(String name) {
-        this.name = name;
-    }
-*/
 
     public List<String> getRegExpList() {
         return regExpList;
@@ -34,17 +26,11 @@ public class Case {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Case aCase = (Case) o;
-        return Objects.equals(regExpList, aCase.regExpList);
+        return Objects.equals(preFilter, aCase.preFilter);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(regExpList);
+        return Objects.hash(preFilter);
     }
-
-/*
-    public void setRegExpList(List<String> regExpList) {
-        this.regExpList = regExpList;
-    }
-*/
 }

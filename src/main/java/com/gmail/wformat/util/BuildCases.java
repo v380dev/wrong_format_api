@@ -5,20 +5,28 @@ import com.gmail.wformat.entitys.Case;
 import java.util.*;
 
 public class BuildCases {
+    public static final String PRE_INCLUDE = "include";
     public static final String INCL_LEFT_QUOT = "[+] *include *\\(?[^`]\\b(?i)%s\\b";
     public static final String INCL_RIGHT_QUOT = "[+] *include *\\(?`?\\b(?i)%s\\b[^`]";// + є, пробіл(таб), include, пробіл(таб), ( може бути, ` може бути,  (?i) без врахування регістра, об'єкт, ` немає
 
     //    + Attributes
+    public static final String PRE_ATTRIBUTES = "Attributes";
     public static final String ATTRIBUTES_LEFT_QUOT = "[+] *Attributes *\\(?[^`]\\b(?i)%s\\b";
     public static final String ATTRIBUTES_RIGHT_QUOT = "[+] *Attributes *\\(?`?(?i)%s\\b[^`]";
 
+    public static final String PRE_DATA_ARR = "data (array";
     public static final String DATA_ARR_LEFT_QUOT = "[+] *data *\\(array\\[?[^`]\\b(?i)%s\\b";
     public static final String DATA_ARR__RIGHT_QUOT = "[+] *data *\\(array *\\[?`?\\b(?i)%s\\b[^`]";
 
+    public static final String PRE_DATA = " + data (";
+    public static final String DATA_LEFT_QUOT = "[+] *data *\\(?[^`]\\b(?i)%s\\b";
+    public static final String DATA_RIGHT_QUOT = "[+] *data *\\(?`?\\b(?i)%s\\b[^`]";
 
-    public static Case incl = new Case();
-    public static Case attr = new Case();
-    public static Case dataArr = new Case();
+
+    public static Case incl = new Case(PRE_INCLUDE);
+    public static Case attr = new Case(PRE_ATTRIBUTES);
+    public static Case dataArr = new Case(PRE_DATA_ARR);
+    public static Case data = new Case(PRE_DATA);
 
 
     private static Set<Case> cases = new HashSet<>();
@@ -36,9 +44,15 @@ public class BuildCases {
     }
 
     public static void addCaseDataArr() {
-        attr.getRegExpList().add(DATA_ARR_LEFT_QUOT);
-        attr.getRegExpList().add(DATA_ARR__RIGHT_QUOT);
-        cases.add(attr);
+        dataArr.getRegExpList().add(DATA_ARR_LEFT_QUOT);
+        dataArr.getRegExpList().add(DATA_ARR__RIGHT_QUOT);
+        cases.add(dataArr);
+    }
+
+    public static void addCaseData() {
+        data.getRegExpList().add(DATA_LEFT_QUOT);
+        data.getRegExpList().add(DATA_RIGHT_QUOT);
+        cases.add(data);
     }
 
     public static List<Case> getCases() {
