@@ -23,5 +23,5 @@ TestRegExp.java
 dev.md
 *.txt
 *.apib
-app.config
+app*.config
 out/

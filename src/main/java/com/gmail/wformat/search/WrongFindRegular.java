@@ -14,31 +14,6 @@ public class WrongFindRegular {
     public static List<WrongObj> getWrongObjList(List<String> allLines, List<String> allObjects, List<Case> cases) {
         List<WrongObj> wrongObjs = new ArrayList<>();
         String currentLine;
-/*
-        for (Case currentCase : cases) {
-            for (String regular : currentCase.getRegExpList()) {
-                for (String obj : allObjects) {
-                    Pattern pattern = Pattern.compile(String.format(regular, obj));
-                    for (int i=0;i< allLines.size();i++) {
-                        currentLine = allLines.get(i);
-                        Matcher matcher = pattern.matcher(currentLine);
-                        if (matcher.find()){
-                            WrongObj wrongObj;
-                            Optional<WrongObj> optionalWrongObj = WrongObj.findByName(obj, wrongObjs);
-                            if (optionalWrongObj.isEmpty()) {
-                                wrongObj = new WrongObj(obj);
-                                wrongObjs.add(wrongObj);
-                            } else {
-                                wrongObj = optionalWrongObj.get();
-                            }
-                            wrongObj.getNumberLines().add(i + 1);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-*/
 
         for (int i = 0; i < allLines.size(); i++) {
             currentLine = allLines.get(i);

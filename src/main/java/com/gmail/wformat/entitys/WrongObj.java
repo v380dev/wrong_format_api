@@ -1,8 +1,9 @@
 package com.gmail.wformat.entitys;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class WrongObj {
+public class WrongObj implements Comparable {
     String name;
     Set<Integer> numberLines;
 
@@ -30,6 +31,15 @@ public class WrongObj {
 
     @Override
     public String toString() {
-        return name +"@@@"+ numberLines;
+        List<Integer> numbers = numberLines.stream().sorted().collect(Collectors.toList());
+        return name +"@@@"+ numbers;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof WrongObj) {
+        return this.getName().compareTo(((WrongObj) o).getName());
+        }
+        return 0;
     }
 }
