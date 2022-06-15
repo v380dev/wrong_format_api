@@ -1,27 +1,36 @@
 package com.gmail.wformat.search;
 
-import com.gmail.wformat.util.RegExpressions;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AllObjects {
+    public static final String REG_START_OBJ = "#{1,} `";
+    public static final String REG_WHOLE_OBJ = "#{1,}[ *\\t]`\\w+`";
+
 
     public static List<String> getList(List<String> listAllLine) {
         List<String> listAllObj = new ArrayList<>();
-        Pattern patternStart = Pattern.compile(RegExpressions.REG_START_OBJ);
-//        Pattern patternStart = Pattern.compile(RegExp.START_OBJ.get.toString());
-        Pattern patternWhole = Pattern.compile(RegExpressions.REG_WHOLE_OBJ);
-//        Pattern patternWhole = Pattern.compile(RegExp.WHOLE_OBJ.get.toString());
+        Pattern patternStart = Pattern.compile(REG_START_OBJ);
+        Pattern patternWhole = Pattern.compile(REG_WHOLE_OBJ);
 
-        for (String currentLine : listAllLine) {
+//        for (String currentLine : listAllLine) {
+        for (int i=0;i< listAllLine.size();i++) {
+            String currentLine = listAllLine.get(i);
             Matcher matcherStart = patternStart.matcher(currentLine);
             Matcher matcherWhole = patternWhole.matcher(currentLine);
-            if (matcherWhole.find()) {
-                matcherStart.find();
-                listAllObj.add(currentLine.substring(matcherStart.end(), matcherWhole.end()-1));
+            boolean isStart = matcherStart.find();
+            boolean isWhole = matcherWhole.find();
+            if (i>10000){
+
+//            System.out.println(i + "  isWhole=" + isWhole +"  "+ currentLine);
+            }
+
+//            if (matcherWhole.find()) {
+            if (isWhole) {
+//                matcherStart.find();
+                listAllObj.add(currentLine.substring(matcherStart.end(), matcherWhole.end() - 1));
             }
         }
 

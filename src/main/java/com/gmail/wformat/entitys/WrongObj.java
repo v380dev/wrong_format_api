@@ -1,23 +1,21 @@
 package com.gmail.wformat.entitys;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class WrongObj {
     String name;
-    List<Integer> numberLines;
+    Set<Integer> numberLines;
 
     public WrongObj(String name) {
         this.name = name;
-        this.numberLines = new ArrayList<>();
+        this.numberLines = new HashSet<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public List<Integer> getNumberLines() {
+    public Set<Integer> getNumberLines() {
         return numberLines;
     }
 
@@ -28,5 +26,10 @@ public class WrongObj {
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public String toString() {
+        return name +"@@@"+ numberLines;
     }
 }
