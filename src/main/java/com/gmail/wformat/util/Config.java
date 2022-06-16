@@ -21,7 +21,7 @@ public class Config {
     public static final String MANUAL_WRITE = "app.manual_write";
 
     public static final String INPUT_FILE_NAME_VAL = "apiary.apib";
-    public static final String SPLITTER_VAL = "@@@";
+    public static final String SPLITTER_VAL = "=";
 
     public static final int CASE_INCLUDE_VAL = 1;
     public static final int CASE_ATTRIBUTE_VAL = 1;

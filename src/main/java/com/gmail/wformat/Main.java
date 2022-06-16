@@ -8,61 +8,80 @@ import com.gmail.wformat.util.Config;
 import com.gmail.wformat.util.ReadWriteFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.gmail.wformat.util.Config.INPUT_FILE_NAME;
+import static com.gmail.wformat.util.Config.INPUT_FILE_NAME_VAL;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         Long time = System.currentTimeMillis();
         Properties prop = Config.getPropertiesFile();
 
-        String inputFileName = prop.getProperty(INPUT_FILE_NAME);
+        String inputFileName;
+        String formDate;
+        String prefixFileName;
+        String splitter;
         int isCaseInclude, isCaseAttribute, isCaseDataArray, isCaseData;
         try {
             isCaseInclude = Integer.valueOf(prop.getProperty(Config.CASE_INCLUDE));
             isCaseAttribute = Integer.valueOf(prop.getProperty(Config.CASE_ATTRIBUTE));
             isCaseDataArray = Integer.valueOf(prop.getProperty(Config.CASE_DATA_ARRAY));
             isCaseData = Integer.valueOf(prop.getProperty(Config.CASE_DATA));
+            formDate = prop.getProperty(Config.OUT_FILE_FORM_DATE);
+            prefixFileName = prop.getProperty(Config.OUT_FILE_PREFIX);
+            splitter = prop.getProperty(Config.SPLITTER);
+            inputFileName = prop.getProperty(INPUT_FILE_NAME);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             isCaseInclude = Config.CASE_INCLUDE_VAL;
             isCaseAttribute = Config.CASE_ATTRIBUTE_VAL;
             isCaseDataArray = Config.CASE_DATA_ARRAY_VAL;
             isCaseData = Config.CASE_DATA_VAL;
+            formDate = prop.getProperty(Config.OUT_FILE_FORM_DATE_VAL);
+            prefixFileName = prop.getProperty(Config.OUT_FILE_PREFIX_VAL);
+            splitter = prop.getProperty(Config.SPLITTER_VAL);
+            inputFileName = prop.getProperty(INPUT_FILE_NAME_VAL);
         }
 
-        if(isCaseInclude == 1) {
+        List<String> pullNameCases = new ArrayList<>();
+        if (isCaseInclude == 1) {
             BuildCases.addCaseInclude();
+            pullNameCases.add(BuildCases.incl.getName());
         }
-        if(isCaseAttribute == 1) {
+        if (isCaseAttribute == 1) {
             BuildCases.addCaseAttribute();
+            pullNameCases.add(BuildCases.attr.getName());
         }
-        if(isCaseDataArray == 1) {
+        if (isCaseDataArray == 1) {
             BuildCases.addCaseDataArr();
+            pullNameCases.add(BuildCases.dataArr.getName());
         }
-        if(isCaseData == 1) {
+        if (isCaseData == 1) {
             BuildCases.addCaseData();
+            pullNameCases.add(BuildCases.data.getName());
         }
 
         List<String> allLines = ReadWriteFile.readInputFile(inputFileName);
 
         List<String> allObj = AllObjects.getList(allLines);
-        List<WrongObj> wObj = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases());
+        List<WrongObj> wObjs = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases());
 
-        if (wObj.size() > 0) {
-            int count = wObj.stream().map(s->s.getNumberLines().size()).mapToInt(i->i).sum();
-            wObj.stream().sorted().forEach(System.out::println);
-            System.out.println(String.format("Знайдено %s помилок", count));
+        ReadWriteFile.write(wObjs, pullNameCases, inputFileName, splitter, prefixFileName, formDate);
+
+        if (wObjs.size() > 0) {
+            int count = wObjs.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
+            wObjs.stream().sorted().forEach(System.out::println);
+            System.out.println(String.format("\nЗнайдено %s помилок", count));
         } else {
-            System.out.println("помилок не знайдено");
+            System.out.println("\nпомилок не знайдено");
         }
 
-
-        System.out.println("пошук зайняв " + (System.currentTimeMillis() - time) / 1000 + " сек.");
+        System.out.println("Тривалість " + (System.currentTimeMillis() - time) / 1000 + " сек.");
 
 
 

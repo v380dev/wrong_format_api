@@ -23,10 +23,10 @@ public class BuildCases {
     public static final String DATA_RIGHT_QUOT = "[+] *data *\\(?`?\\b(?i)%s\\b[^`]";
 
 
-    public static Case incl = new Case(PRE_INCLUDE);
-    public static Case attr = new Case(PRE_ATTRIBUTES);
-    public static Case dataArr = new Case(PRE_DATA_ARR);
-    public static Case data = new Case(PRE_DATA);
+    public static Case incl = new Case("include", "incl", PRE_INCLUDE);
+    public static Case attr = new Case("attribute", "attr",PRE_ATTRIBUTES);
+    public static Case dataArr = new Case("data_array", "d_arr",PRE_DATA_ARR);
+    public static Case data = new Case("data", "data", PRE_DATA);
 
 
     private static Set<Case> cases = new HashSet<>();

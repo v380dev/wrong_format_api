@@ -1,15 +1,17 @@
 package com.gmail.wformat.util;
 
+import com.gmail.wformat.entitys.WrongObj;
+
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ReadWriteFile {
 
-/*
-    private static String generateNameFile(String nameField, String filePrefix, String formDate) {
+    private static String generateNameFile(String prefixFileName, List<String> pullNameCases, String formDate) {
         String date;
         try {
             SimpleDateFormat formatter = new SimpleDateFormat(formDate);
@@ -19,37 +21,39 @@ public class ReadWriteFile {
             e.printStackTrace();
             date = formDate;
         }
-        String fileName = String.format("%s_%s_%s.txt", filePrefix, nameField, date);
-        return fileName;
+        StringBuilder nameCases = new StringBuilder();
+        for (String name : pullNameCases) {
+            nameCases.append(name + "_");
+        }
+        return String.format("%s_%s%s.txt", prefixFileName, nameCases, date);
     }
-*/
 
-/*
-    public static String write(String nameField,
-                             List<Endpoint> endpoints,
-                             String splitter,
-                             String filePrefix,
-                             String formDate) throws IOException {
-        String nameInputFile = generateNameFile(nameField, filePrefix, formDate);
-        try (Writer w = new FileWriter(nameInputFile);) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < endpoints.size(); i++) {
-                sb.append(endpoints.get(i).getNumberLine())
-                        .append(splitter)
-                        .append(endpoints.get(i).getName())
-                        .append(splitter)
-                        .append("REQ=")
-                        .append(endpoints.get(i).getRequests())
-                        .append(splitter)
-                        .append("RES=")
-                        .append(endpoints.get(i).getResponses())
-                        .append('\n');
+    public static String write(List<WrongObj> wObjs, List<String> pullNameCases, String inputFileName, String splitter, String prefixFileName, String formDate) {
+        String nameInputFile = generateNameFile(prefixFileName, pullNameCases, formDate);
+        try (Writer w = new FileWriter(nameInputFile)) {
+            StringBuilder sb = new StringBuilder("Перевірено файл: ");
+            sb.append(inputFileName + "\n\n");
+
+            System.out.println(wObjs.size());
+            if (wObjs.size() == 0) {
+                w.write(sb.toString());
+                w.write("Помилок не знайдено");
+            } else {
+                int count = wObjs.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
+                sb.append(String.format("Знайдено %s помилок\n\n", count));
+                wObjs = wObjs.stream().sorted().collect(Collectors.toList());
+                for (WrongObj obj : wObjs) {
+                    sb.append(obj.getName());
+                    sb.append(splitter);
+                    sb.append(obj.printNumbers() + '\n');
+                }
+                w.write(sb.toString());
             }
-            w.write(sb.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return nameInputFile;
     }
-*/
 
     public static List<String> readInputFile(String nameFiles) throws IOException {
         List<String> listAllLines = new ArrayList<>();
