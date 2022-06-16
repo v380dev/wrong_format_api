@@ -14,6 +14,7 @@ public class Config {
     public static final String CASE_ATTRIBUTE = "app.case.attribute";
     public static final String CASE_DATA_ARRAY = "app.case.data_array";
     public static final String CASE_DATA = "app.case.data";
+    public static final String CASE_FULL_OPTIONS = "app.case.full_options";
 
     public static final String OUT_FILE_PREFIX = "app.out_file_name_prefix";
     public static final String OUT_FILE_FORM_DATE = "app.out_file_form_date";
@@ -27,12 +28,13 @@ public class Config {
     public static final int CASE_ATTRIBUTE_VAL = 1;
     public static final int CASE_DATA_ARRAY_VAL = 1;
     public static final int CASE_DATA_VAL = 1;
+    public static final int CASE_FULL_OPTIONS_VAL = 0;
 
     public static final String OUT_FILE_PREFIX_VAL = "wrong";
     public static final String OUT_FILE_FORM_DATE_VAL = "yyyy-MM-dd_HH-mm-ss";
 
-    public static final String MANUAL_WRITE_VAL = "1";
-    private static final String MANUAL_WRITE_COMMENT = "#app.manual_write 0 - не запитує ручного вводу, 1 - буде запит на ввод з консолі";
+//    public static final String MANUAL_WRITE_VAL = "1";
+//    private static final String MANUAL_WRITE_COMMENT = "#app.manual_write 0 - не запитує ручного вводу, 1 - буде запит на ввод з консолі";
 
     public static Properties getPropertiesFile() {
         Properties prop = new Properties();
@@ -63,12 +65,13 @@ public class Config {
             w.write(String.format("%s=%s\n", CASE_INCLUDE, CASE_INCLUDE_VAL));
             w.write(String.format("%s=%s\n", CASE_ATTRIBUTE, CASE_ATTRIBUTE_VAL));
             w.write(String.format("%s=%s\n", CASE_DATA_ARRAY, CASE_DATA_ARRAY_VAL));
-            w.write(String.format("%s=%s\n\n", CASE_DATA, CASE_DATA_VAL));
+            w.write(String.format("%s=%s\n", CASE_DATA, CASE_DATA_VAL));
+            w.write(String.format("%s=%s\n\n", CASE_FULL_OPTIONS, CASE_FULL_OPTIONS_VAL));
 
             w.write(String.format("%s=%s\n", OUT_FILE_PREFIX, OUT_FILE_PREFIX_VAL));
             w.write(String.format("%s=%s\n\n", OUT_FILE_FORM_DATE, OUT_FILE_FORM_DATE_VAL));
-            w.write(String.format("%s\n", MANUAL_WRITE_COMMENT));
-            w.write(String.format("%s=%s", MANUAL_WRITE, MANUAL_WRITE_VAL));
+//            w.write(String.format("%s\n", MANUAL_WRITE_COMMENT));
+//            w.write(String.format("%s=%s", MANUAL_WRITE, MANUAL_WRITE_VAL));
         } catch (IOException e) {
             e.printStackTrace();
         }
