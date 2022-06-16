@@ -6,25 +6,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AllObjects {
-    public static final String REG_START_OBJ = "#{1,} `";
-    public static final String REG_WHOLE_OBJ = "#{1,}[ *\\t]`\\w+`";
+    public static final String REG_OBJ = "(?<=#.*`)\\w+(?=`)";
 
 
     public static List<String> getList(List<String> listAllLine) {
         List<String> listAllObj = new ArrayList<>();
-        Pattern patternStart = Pattern.compile(REG_START_OBJ);
-        Pattern patternWhole = Pattern.compile(REG_WHOLE_OBJ);
+        Pattern patternStart = Pattern.compile(REG_OBJ);
 
         for (int i = 0; i < listAllLine.size(); i++) {
             String currentLine = listAllLine.get(i);
-            Matcher matcherStart = patternStart.matcher(currentLine);
-            Matcher matcherWhole = patternWhole.matcher(currentLine);
-            boolean isStart = matcherStart.find();
-            boolean isWhole = matcherWhole.find();
-            if (i > 10000) {
-            }
-            if (isWhole) {
-                listAllObj.add(currentLine.substring(matcherStart.end(), matcherWhole.end() - 1));
+            Matcher matcher = patternStart.matcher(currentLine);
+            while (matcher.find()) {
+                listAllObj.add(matcher.group());
             }
         }
         return listAllObj;

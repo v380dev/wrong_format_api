@@ -24,11 +24,12 @@ public class Main {
         String formDate;
         String prefixFileName;
         String splitter;
-        int isCaseInclude, isCaseAttribute, isCaseDataArray, isCaseData;
+        int isCaseInclude, isCaseAttribute, isCaseDataArray, isCaseData, isCaseFullOptions;
         try {
             isCaseInclude = Integer.valueOf(prop.getProperty(Config.CASE_INCLUDE));
             isCaseAttribute = Integer.valueOf(prop.getProperty(Config.CASE_ATTRIBUTE));
             isCaseDataArray = Integer.valueOf(prop.getProperty(Config.CASE_DATA_ARRAY));
+            isCaseFullOptions = Integer.valueOf(prop.getProperty(Config.CASE_FULL_OPTIONS));
             isCaseData = Integer.valueOf(prop.getProperty(Config.CASE_DATA));
             formDate = prop.getProperty(Config.OUT_FILE_FORM_DATE);
             prefixFileName = prop.getProperty(Config.OUT_FILE_PREFIX);
@@ -40,6 +41,7 @@ public class Main {
             isCaseAttribute = Config.CASE_ATTRIBUTE_VAL;
             isCaseDataArray = Config.CASE_DATA_ARRAY_VAL;
             isCaseData = Config.CASE_DATA_VAL;
+            isCaseFullOptions = Config.CASE_FULL_OPTIONS_VAL;
             formDate = prop.getProperty(Config.OUT_FILE_FORM_DATE_VAL);
             prefixFileName = prop.getProperty(Config.OUT_FILE_PREFIX_VAL);
             splitter = prop.getProperty(Config.SPLITTER_VAL);
@@ -63,6 +65,10 @@ public class Main {
             BuildCases.addCaseData();
             pullNameCases.add(BuildCases.data.getName());
         }
+        if (isCaseFullOptions == 1) {
+            BuildCases.addFullOptions();
+            pullNameCases.add(BuildCases.fullOptions.getName());
+        }
 
         List<String> allLines = ReadWriteFile.readInputFile(inputFileName);
 
@@ -73,6 +79,7 @@ public class Main {
 
         if (wObjs.size() > 0) {
             int count = wObjs.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
+            allObj.stream().forEach(System.out::println);
 //            wObjs.stream().sorted().forEach(System.out::println);
             System.out.println(String.format("\nЗнайдено %s помилок", count));
         } else {

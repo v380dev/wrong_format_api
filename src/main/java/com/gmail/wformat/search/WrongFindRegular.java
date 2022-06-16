@@ -21,21 +21,19 @@ public class WrongFindRegular {
                 if (!currentLine.contains(cs.getPreFilter())) {
                     continue;
                 }
-                for (String regular : cs.getRegExpList()) {
-                    for (String obj : allObjects) {
-                        Pattern pattern = Pattern.compile(String.format(regular, obj));
-                        Matcher matcher = pattern.matcher(currentLine);
-                        if (matcher.find()) {
-                            WrongObj wrongObj;
-                            Optional<WrongObj> optionalWrongObj = WrongObj.findByName(obj, wrongObjs);
-                            if (optionalWrongObj.isEmpty()) {
-                                wrongObj = new WrongObj(obj);
-                                wrongObjs.add(wrongObj);
-                            } else {
-                                wrongObj = optionalWrongObj.get();
-                            }
-                            wrongObj.getNumberLines().add(i + 1);
+                for (String obj : allObjects) {
+                    Pattern pattern = Pattern.compile(String.format(cs.getRegExp(), obj));
+                    Matcher matcher = pattern.matcher(currentLine);
+                    if (matcher.find()) {
+                        WrongObj wrongObj;
+                        Optional<WrongObj> optionalWrongObj = WrongObj.findByName(obj, wrongObjs);
+                        if (optionalWrongObj.isEmpty()) {
+                            wrongObj = new WrongObj(obj);
+                            wrongObjs.add(wrongObj);
+                        } else {
+                            wrongObj = optionalWrongObj.get();
                         }
+                        wrongObj.getNumberLines().add(i + 1);
                     }
                 }
             }
