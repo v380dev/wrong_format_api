@@ -2,7 +2,10 @@ package com.gmail.wformat.util;
 
 import com.gmail.wformat.entitys.Case;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class BuildCases {
     public static final String PRE_INCLUDE = "include";
@@ -24,8 +27,8 @@ public class BuildCases {
 
 
     public static Case incl = new Case("include", "incl", PRE_INCLUDE);
-    public static Case attr = new Case("attribute", "attr",PRE_ATTRIBUTES);
-    public static Case dataArr = new Case("data_array", "d_arr",PRE_DATA_ARR);
+    public static Case attr = new Case("attribute", "attr", PRE_ATTRIBUTES);
+    public static Case dataArr = new Case("data_array", "d_arr", PRE_DATA_ARR);
     public static Case data = new Case("data", "data", PRE_DATA);
 
 

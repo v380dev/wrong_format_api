@@ -74,12 +74,3 @@ public class Config {
         }
     }
 }
-/*
-    //example commands
-    public static void main(String[] args) {
-        Properties prop = getPropertiesFile();
-        String fileName = prop.getProperty(INPUT_FILE_NAME);
-    }
-*/
-
-

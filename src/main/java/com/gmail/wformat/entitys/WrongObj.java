@@ -33,7 +33,7 @@ public class WrongObj implements Comparable {
 
     public String printNumbers() {
         ArrayList<Integer> numbers = new ArrayList<>(numberLines);
-        numbers.sort((i1,i2)->i1-i2);
+        numbers.sort((i1, i2) -> i1 - i2);
         return numbers.toString();
     }
 

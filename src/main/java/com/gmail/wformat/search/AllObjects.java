@@ -15,27 +15,18 @@ public class AllObjects {
         Pattern patternStart = Pattern.compile(REG_START_OBJ);
         Pattern patternWhole = Pattern.compile(REG_WHOLE_OBJ);
 
-//        for (String currentLine : listAllLine) {
-        for (int i=0;i< listAllLine.size();i++) {
+        for (int i = 0; i < listAllLine.size(); i++) {
             String currentLine = listAllLine.get(i);
             Matcher matcherStart = patternStart.matcher(currentLine);
             Matcher matcherWhole = patternWhole.matcher(currentLine);
             boolean isStart = matcherStart.find();
             boolean isWhole = matcherWhole.find();
-            if (i>10000){
-
-//            System.out.println(i + "  isWhole=" + isWhole +"  "+ currentLine);
+            if (i > 10000) {
             }
-
-//            if (matcherWhole.find()) {
             if (isWhole) {
-//                matcherStart.find();
                 listAllObj.add(currentLine.substring(matcherStart.end(), matcherWhole.end() - 1));
             }
         }
-
         return listAllObj;
     }
-
-
 }

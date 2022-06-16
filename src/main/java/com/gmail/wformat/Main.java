@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.gmail.wformat.util.Config.INPUT_FILE_NAME;
 import static com.gmail.wformat.util.Config.INPUT_FILE_NAME_VAL;
@@ -75,25 +73,12 @@ public class Main {
 
         if (wObjs.size() > 0) {
             int count = wObjs.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
-            wObjs.stream().sorted().forEach(System.out::println);
+//            wObjs.stream().sorted().forEach(System.out::println);
             System.out.println(String.format("\nЗнайдено %s помилок", count));
         } else {
             System.out.println("\nпомилок не знайдено");
         }
 
         System.out.println("Тривалість " + (System.currentTimeMillis() - time) / 1000 + " сек.");
-
-
-
-/*
-
-        String regular = "[+] *data *\\(?[^`]\\b(?i)%s\\b";
-        String obj = "User_details_response";
-        String line1 = "        + data (User_details_response`)\n";
-        Pattern pattern = Pattern.compile(String.format(regular,obj));
-        Matcher matcher = pattern.matcher(line1);
-        System.out.println(matcher.find());
-*/
-
     }
 }

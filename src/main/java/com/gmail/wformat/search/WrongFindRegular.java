@@ -17,7 +17,7 @@ public class WrongFindRegular {
 
         for (int i = 0; i < allLines.size(); i++) {
             currentLine = allLines.get(i);
-            for(Case cs: cases) {
+            for (Case cs : cases) {
                 if (!currentLine.contains(cs.getPreFilter())) {
                     continue;
                 }
@@ -25,7 +25,7 @@ public class WrongFindRegular {
                     for (String obj : allObjects) {
                         Pattern pattern = Pattern.compile(String.format(regular, obj));
                         Matcher matcher = pattern.matcher(currentLine);
-                        if (matcher.find()){
+                        if (matcher.find()) {
                             WrongObj wrongObj;
                             Optional<WrongObj> optionalWrongObj = WrongObj.findByName(obj, wrongObjs);
                             if (optionalWrongObj.isEmpty()) {
