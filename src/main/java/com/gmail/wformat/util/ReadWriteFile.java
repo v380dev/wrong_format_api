@@ -33,8 +33,6 @@ public class ReadWriteFile {
         try (Writer w = new FileWriter(nameInputFile)) {
             StringBuilder sb = new StringBuilder("Перевірено файл: ");
             sb.append(inputFileName + "\n\n");
-
-            System.out.println(wObjs.size());
             if (wObjs.size() == 0) {
                 w.write(sb.toString());
                 w.write("Помилок не знайдено");
