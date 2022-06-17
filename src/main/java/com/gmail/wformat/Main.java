@@ -27,6 +27,7 @@ public class Main {
         String prefixFileName;
         String splitter;
         int isCaseInclude, isCaseAttribute, isCaseDataArray, isCaseData, isCaseFullOptions;
+        int numberThreads;
         try {
             isCaseInclude = Integer.valueOf(prop.getProperty(Config.CASE_INCLUDE));
             isCaseAttribute = Integer.valueOf(prop.getProperty(Config.CASE_ATTRIBUTE));
@@ -37,6 +38,7 @@ public class Main {
             prefixFileName = prop.getProperty(Config.OUT_FILE_PREFIX);
             splitter = prop.getProperty(Config.SPLITTER);
             inputFileName = prop.getProperty(INPUT_FILE_NAME);
+            numberThreads = Integer.valueOf(prop.getProperty(Config.THREADS));
         } catch (NumberFormatException e) {
             e.printStackTrace();
             isCaseInclude = Config.CASE_INCLUDE_VAL;
@@ -44,10 +46,11 @@ public class Main {
             isCaseDataArray = Config.CASE_DATA_ARRAY_VAL;
             isCaseData = Config.CASE_DATA_VAL;
             isCaseFullOptions = Config.CASE_FULL_OPTIONS_VAL;
-            formDate = prop.getProperty(Config.OUT_FILE_FORM_DATE_VAL);
-            prefixFileName = prop.getProperty(Config.OUT_FILE_PREFIX_VAL);
-            splitter = prop.getProperty(Config.SPLITTER_VAL);
-            inputFileName = prop.getProperty(INPUT_FILE_NAME_VAL);
+            formDate = Config.OUT_FILE_FORM_DATE_VAL;
+            prefixFileName = Config.OUT_FILE_PREFIX_VAL;
+            splitter = Config.SPLITTER_VAL;
+            inputFileName = Config.INPUT_FILE_NAME_VAL;
+            numberThreads = Config.THREADS_VAL;
         }
 
         List<String> pullNameCases = new ArrayList<>();
@@ -74,27 +77,31 @@ public class Main {
 
         List<String> allLines = ReadWriteFile.readInputFile(inputFileName);
         List<String> allObj = AllObjects.getList(allLines);
+        List<WrongObj> listWrongObj = new ArrayList<>();
 
-        int numberThreads = 4;
-        ExecutorService ex = Executors.newFixedThreadPool(numberThreads);
-        int allSizeObj = allObj.size();
-        int sizeBlockLines = allSizeObj / numberThreads;
-        int startPosition = 0;
-        int endPosition = 0;
-        List<CallableImpl>tasks = new ArrayList<>();
-        for (int i = 0; i < numberThreads; i++) {
-            startPosition = i * sizeBlockLines;
-            endPosition = i == numberThreads - 1 ? allSizeObj : startPosition + sizeBlockLines;
-            tasks.add(new CallableImpl(allLines,allObj, BuildCases.getCases(), startPosition, endPosition));
+//        якщо вказано декілька потоків:
+        if (numberThreads > 1) {
+            ExecutorService ex = Executors.newFixedThreadPool(numberThreads);
+            int allSizeObj = allObj.size();
+            int sizeBlockLines = allSizeObj / numberThreads;
+            int startPosition = 0;
+            int endPosition = 0;
+            List<CallableImpl> tasks = new ArrayList<>();
+            for (int i = 0; i < numberThreads; i++) {
+                startPosition = i * sizeBlockLines;
+                endPosition = i == numberThreads - 1 ? allSizeObj : startPosition + sizeBlockLines;
+                tasks.add(new CallableImpl(allLines, allObj, BuildCases.getCases(), startPosition, endPosition));
+            }
+            List<Future<List<WrongObj>>> futures = ex.invokeAll(tasks);
+            ex.shutdown();
+            for (Future f : futures) {
+                listWrongObj.addAll((List<WrongObj>) f.get());
+            }
+        } else {// в однопотоковому режимі
+            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases(),0,allObj.size());
         }
-        List<Future<List<WrongObj>>> futures = ex.invokeAll(tasks);
-        ex.shutdown();
-        List<WrongObj>listWrongObj = new ArrayList<>();
-        for(Future f : futures) {
-            listWrongObj.addAll ((List<WrongObj>) f.get());
-        }
+
         ReadWriteFile.write(listWrongObj, pullNameCases, inputFileName, splitter, prefixFileName, formDate);
-
         if (listWrongObj.size() > 0) {
             int count = listWrongObj.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
             System.out.println(String.format("\nЗнайдено %s помилок", count));
@@ -104,19 +111,4 @@ public class Main {
 
         System.out.println("Тривалість " + (System.currentTimeMillis() - time) / 1000 + " сек.");
     }
-/*
-        List<WrongObj> wObjs = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases());
-
-        ReadWriteFile.write(wObjs, pullNameCases, inputFileName, splitter, prefixFileName, formDate);
-
-        if (wObjs.size() > 0) {
-            int count = wObjs.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
-            System.out.println(String.format("\nЗнайдено %s помилок", count));
-        } else {
-            System.out.println("\nпомилок не знайдено");
-        }
-
-        System.out.println("Тривалість " + (System.currentTimeMillis() - time) / 1000 + " сек.");
-    }
-*/
 }

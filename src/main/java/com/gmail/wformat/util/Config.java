@@ -4,12 +4,13 @@ import java.io.*;
 import java.util.Properties;
 
 public class Config {
+    public static final String THREADS = "app.threads";
     private static final String FILE_PROP = "app_wr.config";
 
     public static final String INPUT_FILE_NAME = "app.input_file";
     public static final String SPLITTER = "app.splitter";
 
-    private static final String SET_CASES = "#cases: 1 включено, 0 вимкнено";
+    private static final String CASES_COMMENT = "#cases: 1 включено, 0 вимкнено";
     public static final String CASE_INCLUDE = "app.case.include";
     public static final String CASE_ATTRIBUTE = "app.case.attribute";
     public static final String CASE_DATA_ARRAY = "app.case.data_array";
@@ -25,14 +26,16 @@ public class Config {
     public static final String SPLITTER_VAL = "=";
 
     public static final int CASE_INCLUDE_VAL = 1;
-    public static final int CASE_ATTRIBUTE_VAL = 1;
-    public static final int CASE_DATA_ARRAY_VAL = 1;
-    public static final int CASE_DATA_VAL = 1;
+    public static final int CASE_ATTRIBUTE_VAL = 0;
+    public static final int CASE_DATA_ARRAY_VAL = 0;
+    public static final int CASE_DATA_VAL = 0;
     public static final int CASE_FULL_OPTIONS_VAL = 0;
 
     public static final String OUT_FILE_PREFIX_VAL = "wrong";
     public static final String OUT_FILE_FORM_DATE_VAL = "yyyy-MM-dd_HH-mm-ss";
 
+    public static final int THREADS_VAL = 4;
+    private static final String THREADS_COMMENT = "#кількість потоків: оптимально 3-4";
 //    public static final String MANUAL_WRITE_VAL = "1";
 //    private static final String MANUAL_WRITE_COMMENT = "#app.manual_write 0 - не запитує ручного вводу, 1 - буде запит на ввод з консолі";
 
@@ -61,7 +64,7 @@ public class Config {
             w.write(String.format("%s=%s\n", INPUT_FILE_NAME, INPUT_FILE_NAME_VAL));
             w.write(String.format("%s=%s\n\n", SPLITTER, SPLITTER_VAL));
 
-            w.write(String.format("%s\n", SET_CASES));
+            w.write(String.format("%s\n", CASES_COMMENT));
             w.write(String.format("%s=%s\n", CASE_INCLUDE, CASE_INCLUDE_VAL));
             w.write(String.format("%s=%s\n", CASE_ATTRIBUTE, CASE_ATTRIBUTE_VAL));
             w.write(String.format("%s=%s\n", CASE_DATA_ARRAY, CASE_DATA_ARRAY_VAL));
@@ -70,6 +73,9 @@ public class Config {
 
             w.write(String.format("%s=%s\n", OUT_FILE_PREFIX, OUT_FILE_PREFIX_VAL));
             w.write(String.format("%s=%s\n\n", OUT_FILE_FORM_DATE, OUT_FILE_FORM_DATE_VAL));
+
+            w.write(String.format("%s\n", THREADS_COMMENT));
+            w.write(String.format("%s=%s", THREADS, THREADS_VAL));
 //            w.write(String.format("%s\n", MANUAL_WRITE_COMMENT));
 //            w.write(String.format("%s=%s", MANUAL_WRITE, MANUAL_WRITE_VAL));
         } catch (IOException e) {

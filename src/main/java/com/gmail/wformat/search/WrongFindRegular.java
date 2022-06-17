@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class WrongFindRegular {
 
-    public static List<WrongObj> getWrongObjList(List<String> allLines, List<String> allObjects, List<Case> cases) {
+    public static List<WrongObj> getWrongObjList(List<String> allLines, List<String> allObjects, List<Case> cases, int startPosition, int endPosition) {
         List<WrongObj> wrongObjs = new ArrayList<>();
         String currentLine;
 
@@ -22,24 +22,22 @@ public class WrongFindRegular {
                 if (!currentLine.contains(cs.getPreFilter())) {
                     continue;
                 }
-                for (String obj : allObjects) {
-                    Pattern pattern = Pattern.compile(String.format(cs.getRegExp(), obj));
+                for (int j=startPosition;j<endPosition;j++) {
+                    Pattern pattern = Pattern.compile(String.format(cs.getRegExp(), allObjects.get(j)));
                     Matcher matcher = pattern.matcher(currentLine);
                     if (matcher.find()) {
-                    Pattern patternExclDescript = Pattern.compile(String.format(cs.getExcludeDescription(), obj));
-                    Matcher matcherExclDescript = patternExclDescript.matcher(currentLine);
+                        Pattern patternExclDescript = Pattern.compile(String.format(cs.getExcludeDescription(), allObjects.get(j)));
+                        Matcher matcherExclDescript = patternExclDescript.matcher(currentLine);
                         if (!matcherExclDescript.find()) {
-//                    if (matcher.find()) {
                             WrongObj wrongObj;
-                            Optional<WrongObj> optionalWrongObj = WrongObj.findByName(obj, wrongObjs);
+                            Optional<WrongObj> optionalWrongObj = WrongObj.findByName(allObjects.get(j), wrongObjs);
                             if (optionalWrongObj.isEmpty()) {
-                                wrongObj = new WrongObj(obj);
+                                wrongObj = new WrongObj(allObjects.get(j));
                                 wrongObjs.add(wrongObj);
                             } else {
                                 wrongObj = optionalWrongObj.get();
                             }
                             wrongObj.getNumberLines().add(i + 1);
-
                         }
                     }
                 }
