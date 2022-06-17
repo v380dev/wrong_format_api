@@ -52,6 +52,10 @@ public class Main {
             inputFileName = Config.INPUT_FILE_NAME_VAL;
             numberThreads = Config.THREADS_VAL;
         }
+        if (isCaseFullOptions == 0 && isCaseInclude == 0 && isCaseAttribute == 0 && isCaseDataArray == 0 && isCaseData == 0) {
+            System.out.println("\nне обрано жодного кейсу");
+            return;
+        }
 
         List<String> pullNameCases = new ArrayList<>();
         if (isCaseInclude == 1) {
@@ -98,7 +102,7 @@ public class Main {
                 listWrongObj.addAll((List<WrongObj>) f.get());
             }
         } else {// в однопотоковому режимі
-            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases(),0,allObj.size());
+            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases(), 0, allObj.size());
         }
 
         ReadWriteFile.write(listWrongObj, pullNameCases, inputFileName, splitter, prefixFileName, formDate);
@@ -108,7 +112,6 @@ public class Main {
         } else {
             System.out.println("\nпомилок не знайдено");
         }
-
         System.out.println("Тривалість " + (System.currentTimeMillis() - time) / 1000 + " сек.");
     }
 }
