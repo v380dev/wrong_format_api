@@ -26,7 +26,8 @@ public class Main {
         String formDate;
         String prefixFileName;
         String splitter;
-        int isCaseInclude, isCaseAttribute, isCaseDataArray, isCaseData, isCaseFullOptions;
+        String manualRegExp;
+        int isCaseInclude, isCaseAttribute, isCaseDataArray, isCaseData, isCaseFullOptions, isCaseManual;
         int numberThreads;
         try {
             isCaseInclude = Integer.valueOf(prop.getProperty(Config.CASE_INCLUDE));
@@ -34,6 +35,8 @@ public class Main {
             isCaseDataArray = Integer.valueOf(prop.getProperty(Config.CASE_DATA_ARRAY));
             isCaseFullOptions = Integer.valueOf(prop.getProperty(Config.CASE_FULL_OPTIONS));
             isCaseData = Integer.valueOf(prop.getProperty(Config.CASE_DATA));
+            isCaseManual = Integer.valueOf(prop.getProperty(Config.CASE_MANUAL_OPTIONS));
+            manualRegExp = prop.getProperty(Config.REGULAR_MANUAL_OPTIONS);
             formDate = prop.getProperty(Config.OUT_FILE_FORM_DATE);
             prefixFileName = prop.getProperty(Config.OUT_FILE_PREFIX);
             splitter = prop.getProperty(Config.SPLITTER);
@@ -46,13 +49,15 @@ public class Main {
             isCaseDataArray = Config.CASE_DATA_ARRAY_VAL;
             isCaseData = Config.CASE_DATA_VAL;
             isCaseFullOptions = Config.CASE_FULL_OPTIONS_VAL;
+            isCaseManual = Config.CASE_MANUAL_OPTIONS_VAL;
+            manualRegExp = Config.REGULAR_MANUAL_VAL;
             formDate = Config.OUT_FILE_FORM_DATE_VAL;
             prefixFileName = Config.OUT_FILE_PREFIX_VAL;
             splitter = Config.SPLITTER_VAL;
             inputFileName = Config.INPUT_FILE_NAME_VAL;
             numberThreads = Config.THREADS_VAL;
         }
-        if (isCaseFullOptions == 0 && isCaseInclude == 0 && isCaseAttribute == 0 && isCaseDataArray == 0 && isCaseData == 0) {
+        if (isCaseFullOptions == 0 && isCaseInclude == 0 && isCaseAttribute == 0 && isCaseDataArray == 0 && isCaseData == 0 && isCaseManual == 0) {
             System.out.println("\nне обрано жодного кейсу");
             return;
         }
@@ -77,6 +82,10 @@ public class Main {
         if (isCaseFullOptions == 1) {
             BuildCases.addFullOptions();
             pullNameCases.add(BuildCases.fullOptions.getName());
+        }
+        if (isCaseManual == 1) {
+            BuildCases.addManualOptions(manualRegExp);
+            pullNameCases.add(BuildCases.manualOptions.getName());
         }
 
         List<String> allLines = ReadWriteFile.readInputFile(inputFileName);

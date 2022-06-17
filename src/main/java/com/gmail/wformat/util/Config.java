@@ -16,11 +16,13 @@ public class Config {
     public static final String CASE_DATA_ARRAY = "app.case.data_array";
     public static final String CASE_DATA = "app.case.data";
     public static final String CASE_FULL_OPTIONS = "app.case.full_options";
+    public static final String CASE_MANUAL_OPTIONS = "app.user.manual_options";
+    public static final String REGULAR_MANUAL_OPTIONS = "app.user.regular_expression";
 
     public static final String OUT_FILE_PREFIX = "app.out_file_name_prefix";
     public static final String OUT_FILE_FORM_DATE = "app.out_file_form_date";
 
-    public static final String MANUAL_WRITE = "app.manual_write";
+    private static final String MANUAL_COMMENT = "# %1%s підставляє ім'я об'єкту";
 
     public static final String INPUT_FILE_NAME_VAL = "apiary.apib";
     public static final String SPLITTER_VAL = "=";
@@ -30,12 +32,15 @@ public class Config {
     public static final int CASE_DATA_ARRAY_VAL = 0;
     public static final int CASE_DATA_VAL = 0;
     public static final int CASE_FULL_OPTIONS_VAL = 0;
+    public static final int CASE_MANUAL_OPTIONS_VAL = 0;
+    public static final String REGULAR_MANUAL_VAL = "([\\(]\\b%1$s\\b)|(\\b%1$s\\b[\\)])";
 
     public static final String OUT_FILE_PREFIX_VAL = "wrong";
     public static final String OUT_FILE_FORM_DATE_VAL = "yyyy-MM-dd_HH-mm-ss";
 
     public static final int THREADS_VAL = 4;
     private static final String THREADS_COMMENT = "#кількість потоків:";
+    private static final String MANUAL_EXAMPLE = "#example: ([\\\\(]\\\\b%1$s\\\\b)|(\\\\b%1$s\\\\b[\\\\)])";
 
     public static Properties getPropertiesFile() {
         Properties prop = new Properties();
@@ -68,6 +73,10 @@ public class Config {
             w.write(String.format("%s=%s\n", CASE_DATA_ARRAY, CASE_DATA_ARRAY_VAL));
             w.write(String.format("%s=%s\n", CASE_DATA, CASE_DATA_VAL));
             w.write(String.format("%s=%s\n\n", CASE_FULL_OPTIONS, CASE_FULL_OPTIONS_VAL));
+            w.write(String.format("%s\n", MANUAL_COMMENT));
+            w.write(String.format("%s\n", MANUAL_EXAMPLE));
+            w.write(String.format("%s=%s\n", CASE_MANUAL_OPTIONS, CASE_MANUAL_OPTIONS_VAL));
+            w.write(String.format("%s=\n\n", REGULAR_MANUAL_OPTIONS));
 
             w.write(String.format("%s=%s\n", OUT_FILE_PREFIX, OUT_FILE_PREFIX_VAL));
             w.write(String.format("%s=%s\n\n", OUT_FILE_FORM_DATE, OUT_FILE_FORM_DATE_VAL));
