@@ -85,15 +85,9 @@ public class Main {
 //        якщо вказано декілька потоків:
         if (numberThreads > 1) {
             ExecutorService ex = Executors.newFixedThreadPool(numberThreads);
-            int allLinesSize = allLines.size();
-            int sizeBlockLines = allLines.size() / numberThreads;
-            int startPosition = 0;
-            int endPosition = 0;
             List<CallableImpl> tasks = new ArrayList<>();
             for (int i = 0; i < numberThreads; i++) {
-                startPosition = i * sizeBlockLines;
-                endPosition = i == numberThreads - 1 ? allLinesSize : startPosition + sizeBlockLines;
-                tasks.add(new CallableImpl(allLines, BuildCases.getCases(), startPosition, endPosition));
+                tasks.add(new CallableImpl(allLines, BuildCases.getCases(), i, numberThreads));
             }
             List<Future<List<WrongObj>>> futures = ex.invokeAll(tasks);
             ex.shutdown();
@@ -101,7 +95,7 @@ public class Main {
                 listWrongObj.addAll((List<WrongObj>) f.get());
             }
         } else {// в однопотоковому режимі
-            List<String> allObj = AllObjects.getList(allLines, 0, allLines.size());
+            List<String> allObj = AllObjects.getList(allLines, 0, 1);
             listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases());
         }
 
