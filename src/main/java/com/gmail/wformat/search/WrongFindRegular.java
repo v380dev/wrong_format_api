@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class WrongFindRegular {
 
-    public static List<WrongObj> getWrongObjList(List<String> allLines, List<String> allObjects, List<Case> cases, int startPosition, int endPosition) {
+    public static List<WrongObj> getWrongObjList(List<String> allLines, List<String> allObjects, List<Case> cases) {
         List<WrongObj> wrongObjs = new ArrayList<>();
         String currentLine;
 
@@ -22,17 +22,17 @@ public class WrongFindRegular {
                 if (!currentLine.contains(cs.getPreFilter())) {
                     continue;
                 }
-                for (int j=startPosition;j<endPosition;j++) {
-                    Pattern pattern = Pattern.compile(String.format(cs.getRegExp(), allObjects.get(j)));
+                for (String obj : allObjects) {
+                    Pattern pattern = Pattern.compile(String.format(cs.getRegExp(), obj));
                     Matcher matcher = pattern.matcher(currentLine);
                     if (matcher.find()) {
-                        Pattern patternExclDescript = Pattern.compile(String.format(cs.getExcludeDescription(), allObjects.get(j)));
+                        Pattern patternExclDescript = Pattern.compile(String.format(cs.getExcludeDescription(), obj));
                         Matcher matcherExclDescript = patternExclDescript.matcher(currentLine);
                         if (!matcherExclDescript.find()) {
                             WrongObj wrongObj;
-                            Optional<WrongObj> optionalWrongObj = WrongObj.findByName(allObjects.get(j), wrongObjs);
+                            Optional<WrongObj> optionalWrongObj = WrongObj.findByName(obj, wrongObjs);
                             if (optionalWrongObj.isEmpty()) {
-                                wrongObj = new WrongObj(allObjects.get(j));
+                                wrongObj = new WrongObj(obj);
                                 wrongObjs.add(wrongObj);
                             } else {
                                 wrongObj = optionalWrongObj.get();

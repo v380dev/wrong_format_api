@@ -35,7 +35,7 @@ public class Config {
     public static final String OUT_FILE_FORM_DATE_VAL = "yyyy-MM-dd_HH-mm-ss";
 
     public static final int THREADS_VAL = 4;
-    private static final String THREADS_COMMENT = "#кількість потоків: оптимально 3-4";
+    private static final String THREADS_COMMENT = "#кількість потоків:";
 
     public static Properties getPropertiesFile() {
         Properties prop = new Properties();

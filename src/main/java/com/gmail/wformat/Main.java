@@ -80,21 +80,20 @@ public class Main {
         }
 
         List<String> allLines = ReadWriteFile.readInputFile(inputFileName);
-        List<String> allObj = AllObjects.getList(allLines);
         List<WrongObj> listWrongObj = new ArrayList<>();
 
 //        якщо вказано декілька потоків:
         if (numberThreads > 1) {
             ExecutorService ex = Executors.newFixedThreadPool(numberThreads);
-            int allSizeObj = allObj.size();
-            int sizeBlockLines = allSizeObj / numberThreads;
+            int allLinesSize = allLines.size();
+            int sizeBlockLines = allLines.size() / numberThreads;
             int startPosition = 0;
             int endPosition = 0;
             List<CallableImpl> tasks = new ArrayList<>();
             for (int i = 0; i < numberThreads; i++) {
                 startPosition = i * sizeBlockLines;
-                endPosition = i == numberThreads - 1 ? allSizeObj : startPosition + sizeBlockLines;
-                tasks.add(new CallableImpl(allLines, allObj, BuildCases.getCases(), startPosition, endPosition));
+                endPosition = i == numberThreads - 1 ? allLinesSize : startPosition + sizeBlockLines;
+                tasks.add(new CallableImpl(allLines, BuildCases.getCases(), startPosition, endPosition));
             }
             List<Future<List<WrongObj>>> futures = ex.invokeAll(tasks);
             ex.shutdown();
@@ -102,7 +101,8 @@ public class Main {
                 listWrongObj.addAll((List<WrongObj>) f.get());
             }
         } else {// в однопотоковому режимі
-            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases(), 0, allObj.size());
+            List<String> allObj = AllObjects.getList(allLines, 0, allLines.size());
+            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases());
         }
 
         ReadWriteFile.write(listWrongObj, pullNameCases, inputFileName, splitter, prefixFileName, formDate);
