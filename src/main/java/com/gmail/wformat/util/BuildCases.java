@@ -23,12 +23,14 @@ public class BuildCases {
     public static final String PRE_FULL_OPTIONS = "+";
     public static final String FULL_OPTIONS_QUOTES = "((?<!`)\\b%1$s\\b)|(\\b%1$s\\b(?!`))";
 
+    public static final String EXCLUDE_DESCRIPTIONS = "((?<!`)\\b%1$s\\b \\b\\w+\\b \\b\\w+\\b(?!`))|((?<!`)\\b\\w+\\b \\b%1$s\\b \\b\\w+\\b(?!`))|((?<!`)\\b\\w+\\b \\b\\w+\\b \\b%1$s\\b(?!`))";
 
-    public static Case incl = new Case("include", "incl", PRE_INCLUDE, INCL_QUOTES);
-    public static Case attr = new Case("attribute", "attr", PRE_ATTRIBUTES, ATTRIBUTES_QUOTES);
-    public static Case dataArr = new Case("data_array", "d_arr", PRE_DATA_ARR, DATA_ARR_QUOTES);
-    public static Case data = new Case("data", "data", PRE_DATA, DATA_QUOTES);
-    public static Case fullOptions = new Case("fullOptions", "full", PRE_FULL_OPTIONS, FULL_OPTIONS_QUOTES);
+
+    public static Case incl = new Case("include", "incl", PRE_INCLUDE, INCL_QUOTES, EXCLUDE_DESCRIPTIONS);
+    public static Case attr = new Case("attribute", "attr", PRE_ATTRIBUTES, ATTRIBUTES_QUOTES, EXCLUDE_DESCRIPTIONS);
+    public static Case dataArr = new Case("data_array", "d_arr", PRE_DATA_ARR, DATA_ARR_QUOTES, EXCLUDE_DESCRIPTIONS);
+    public static Case data = new Case("data", "data", PRE_DATA, DATA_QUOTES, EXCLUDE_DESCRIPTIONS);
+    public static Case fullOptions = new Case("fullOptions", "full", PRE_FULL_OPTIONS, FULL_OPTIONS_QUOTES, EXCLUDE_DESCRIPTIONS);
 
 
     private static Set<Case> cases = new HashSet<>();

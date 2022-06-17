@@ -2,6 +2,7 @@ package com.gmail.wformat.search;
 
 import com.gmail.wformat.entitys.Case;
 import com.gmail.wformat.entitys.WrongObj;
+import com.gmail.wformat.util.BuildCases;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,15 +26,21 @@ public class WrongFindRegular {
                     Pattern pattern = Pattern.compile(String.format(cs.getRegExp(), obj));
                     Matcher matcher = pattern.matcher(currentLine);
                     if (matcher.find()) {
-                        WrongObj wrongObj;
-                        Optional<WrongObj> optionalWrongObj = WrongObj.findByName(obj, wrongObjs);
-                        if (optionalWrongObj.isEmpty()) {
-                            wrongObj = new WrongObj(obj);
-                            wrongObjs.add(wrongObj);
-                        } else {
-                            wrongObj = optionalWrongObj.get();
+                    Pattern patternExclDescript = Pattern.compile(String.format(cs.getExcludeDescription(), obj));
+                    Matcher matcherExclDescript = patternExclDescript.matcher(currentLine);
+                        if (!matcherExclDescript.find()) {
+//                    if (matcher.find()) {
+                            WrongObj wrongObj;
+                            Optional<WrongObj> optionalWrongObj = WrongObj.findByName(obj, wrongObjs);
+                            if (optionalWrongObj.isEmpty()) {
+                                wrongObj = new WrongObj(obj);
+                                wrongObjs.add(wrongObj);
+                            } else {
+                                wrongObj = optionalWrongObj.get();
+                            }
+                            wrongObj.getNumberLines().add(i + 1);
+
                         }
-                        wrongObj.getNumberLines().add(i + 1);
                     }
                 }
             }
