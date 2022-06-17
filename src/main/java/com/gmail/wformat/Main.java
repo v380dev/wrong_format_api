@@ -3,6 +3,7 @@ package com.gmail.wformat;
 import com.gmail.wformat.entitys.WrongObj;
 import com.gmail.wformat.search.AllObjects;
 import com.gmail.wformat.search.WrongFindRegular;
+import com.gmail.wformat.threads.CallableImpl;
 import com.gmail.wformat.util.BuildCases;
 import com.gmail.wformat.util.Config;
 import com.gmail.wformat.util.ReadWriteFile;
@@ -11,12 +12,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.*;
 
 import static com.gmail.wformat.util.Config.INPUT_FILE_NAME;
 import static com.gmail.wformat.util.Config.INPUT_FILE_NAME_VAL;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
         Long time = System.currentTimeMillis();
         Properties prop = Config.getPropertiesFile();
 
@@ -71,16 +73,30 @@ public class Main {
         }
 
         List<String> allLines = ReadWriteFile.readInputFile(inputFileName);
-
         List<String> allObj = AllObjects.getList(allLines);
-        List<WrongObj> wObjs = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases());
 
-        ReadWriteFile.write(wObjs, pullNameCases, inputFileName, splitter, prefixFileName, formDate);
+        int numberThreads = 4;
+        ExecutorService ex = Executors.newFixedThreadPool(numberThreads);
+        int allSizeObj = allObj.size();
+        int sizeBlockLines = allSizeObj / numberThreads;
+        int startPosition = 0;
+        int endPosition = 0;
+        List<CallableImpl>tasks = new ArrayList<>();
+        for (int i = 0; i < numberThreads; i++) {
+            startPosition = i * sizeBlockLines;
+            endPosition = i == numberThreads - 1 ? allSizeObj : startPosition + sizeBlockLines;
+            tasks.add(new CallableImpl(allLines,allObj, BuildCases.getCases(), startPosition, endPosition));
+        }
+        List<Future<List<WrongObj>>> futures = ex.invokeAll(tasks);
+        ex.shutdown();
+        List<WrongObj>listWrongObj = new ArrayList<>();
+        for(Future f : futures) {
+            listWrongObj.addAll ((List<WrongObj>) f.get());
+        }
+        ReadWriteFile.write(listWrongObj, pullNameCases, inputFileName, splitter, prefixFileName, formDate);
 
-        if (wObjs.size() > 0) {
-            int count = wObjs.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
-//            allObj.stream().forEach(System.out::println);
-//            wObjs.stream().sorted().forEach(System.out::println);
+        if (listWrongObj.size() > 0) {
+            int count = listWrongObj.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
             System.out.println(String.format("\nЗнайдено %s помилок", count));
         } else {
             System.out.println("\nпомилок не знайдено");
@@ -88,4 +104,19 @@ public class Main {
 
         System.out.println("Тривалість " + (System.currentTimeMillis() - time) / 1000 + " сек.");
     }
+/*
+        List<WrongObj> wObjs = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases());
+
+        ReadWriteFile.write(wObjs, pullNameCases, inputFileName, splitter, prefixFileName, formDate);
+
+        if (wObjs.size() > 0) {
+            int count = wObjs.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
+            System.out.println(String.format("\nЗнайдено %s помилок", count));
+        } else {
+            System.out.println("\nпомилок не знайдено");
+        }
+
+        System.out.println("Тривалість " + (System.currentTimeMillis() - time) / 1000 + " сек.");
+    }
+*/
 }
