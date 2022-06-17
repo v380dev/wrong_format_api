@@ -79,7 +79,7 @@ public class Main {
 
         if (wObjs.size() > 0) {
             int count = wObjs.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
-            allObj.stream().forEach(System.out::println);
+//            allObj.stream().forEach(System.out::println);
 //            wObjs.stream().sorted().forEach(System.out::println);
             System.out.println(String.format("\nЗнайдено %s помилок", count));
         } else {
