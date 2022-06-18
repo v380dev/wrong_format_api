@@ -26,9 +26,6 @@ public class WrongFindRegular {
                     Pattern pattern = Pattern.compile(String.format(cs.getRegExp(), obj));
                     Matcher matcher = pattern.matcher(currentLine);
                     if (matcher.find()) {
-//                        Pattern patternExclDescript = Pattern.compile(String.format(cs.getExcludeDescription(), obj));
-//                        Matcher matcherExclDescript = patternExclDescript.matcher(currentLine);
-//                        if (matcherExclDescript.find()) {
                             WrongObj wrongObj;
                             Optional<WrongObj> optionalWrongObj = WrongObj.findByName(obj, wrongObjs);
                             if (optionalWrongObj.isEmpty()) {

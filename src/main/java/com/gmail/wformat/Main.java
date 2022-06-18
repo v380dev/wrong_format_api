@@ -86,6 +86,7 @@ public class Main {
         if (isCaseManual == 1) {
             BuildCases.addManualOptions(manualRegExp);
             pullNameCases.add(BuildCases.manualOptions.getName());
+            System.out.println(manualRegExp);
         }
 
         List<String> allLines = ReadWriteFile.readInputFile(inputFileName);
