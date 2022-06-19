@@ -1,10 +1,13 @@
 package com.gmail.wformat;
 
-import com.gmail.wformat.entitys.Vocabulary;
+import com.gmail.wformat.entitys.Case;
 import com.gmail.wformat.entitys.WrongObj;
 import com.gmail.wformat.search.AllObjects;
+import com.gmail.wformat.entitys.HoldObjVoc;
+import com.gmail.wformat.search.Vocabulary;
 import com.gmail.wformat.search.WrongFindRegular;
-import com.gmail.wformat.threads.CallableImpl;
+import com.gmail.wformat.threads.CallSearchObjVocab;
+import com.gmail.wformat.threads.CallSearchWrong;
 import com.gmail.wformat.util.BuildCases;
 import com.gmail.wformat.util.Config;
 import com.gmail.wformat.util.ReadWriteFile;
@@ -12,11 +15,14 @@ import com.gmail.wformat.util.ReadWriteFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static com.gmail.wformat.util.Config.INPUT_FILE_NAME;
-import static com.gmail.wformat.util.Config.INPUT_FILE_NAME_VAL;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
@@ -92,25 +98,56 @@ public class Main {
 
         List<String> allLines = ReadWriteFile.readInputFile(inputFileName);
         List<WrongObj> listWrongObj = new ArrayList<>();
-        var vocabulary = new Vocabulary();
-        vocabulary.fill(allLines);
+        HoldObjVoc holdObjVoc = new HoldObjVoc();
+        List<Case> cases = BuildCases.getCases();
 
 //        якщо вказано декілька потоків:
         if (numberThreads > 1) {
             ExecutorService ex = Executors.newFixedThreadPool(numberThreads);
-            List<CallableImpl> tasks = new ArrayList<>();
+            List<CallSearchObjVocab> taskObjVoc = new ArrayList<>();
             for (int i = 0; i < numberThreads; i++) {
-                tasks.add(new CallableImpl(allLines, BuildCases.getCases(), i, numberThreads));
+                CallSearchObjVocab callSearchObjVocab = new CallSearchObjVocab(allLines, i, numberThreads);
+                taskObjVoc.add(callSearchObjVocab);
+            }
+            List<Future<HoldObjVoc>> futureObjVoc = ex.invokeAll(taskObjVoc);
+            for (Future f : futureObjVoc) {
+                HoldObjVoc tempHoldObjVoc = (HoldObjVoc) f.get();
+                holdObjVoc.getListAllObj().addAll(tempHoldObjVoc.getListAllObj());
+
+                Map<String, List<Integer>> tempMap = tempHoldObjVoc.getVoc().getMap();
+                Map<String, List<Integer>> map = holdObjVoc.getVoc().getMap();
+
+                for (String key : tempMap.keySet()) {
+                    if (map.containsKey(key)) {
+                        map.get(key).addAll(tempMap.get(key));
+                    } else {
+                        map.put(key, tempMap.get(key));
+                    }
+                }
+            }
+            System.out.println("знайдено об'єктів: " + holdObjVoc.getListAllObj().size());
+            System.out.println("сформовано словник, розміром: " + holdObjVoc.getVoc().getMap().size());
+
+            List<CallSearchWrong> tasks = new ArrayList<>();
+            for (int i = 0; i < numberThreads; i++) {
+                tasks.add(new CallSearchWrong(allLines, holdObjVoc.getListAllObj(), cases, holdObjVoc.getVoc(), i, numberThreads));
             }
             List<Future<List<WrongObj>>> futures = ex.invokeAll(tasks);
             ex.shutdown();
             for (Future f : futures) {
                 listWrongObj.addAll((List<WrongObj>) f.get());
             }
+
+
         } else {// в однопотоковому режимі
-            List<String> allObj = AllObjects.getList(allLines, 0, 1);
-//            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases());
-            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObj,vocabulary.getMap(), BuildCases.getCases());
+            var vocabulary = new Vocabulary();
+            vocabulary.fill(allLines);
+
+            List<String> allObjs = AllObjects.getList(allLines, 0, 1);
+            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObjs, vocabulary.getMap(), cases);
+
+            System.out.println("знайдено об'єктів: " + allObjs.size());
+            System.out.println("сформовано словник, розміром: " + vocabulary.getMap().size());
         }
 
         ReadWriteFile.write(listWrongObj, pullNameCases, inputFileName, splitter, prefixFileName, formDate);
