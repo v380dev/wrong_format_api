@@ -1,5 +1,6 @@
 package com.gmail.wformat;
 
+import com.gmail.wformat.entitys.Vocabulary;
 import com.gmail.wformat.entitys.WrongObj;
 import com.gmail.wformat.search.AllObjects;
 import com.gmail.wformat.search.WrongFindRegular;
@@ -91,6 +92,8 @@ public class Main {
 
         List<String> allLines = ReadWriteFile.readInputFile(inputFileName);
         List<WrongObj> listWrongObj = new ArrayList<>();
+        var vocabulary = new Vocabulary();
+        vocabulary.fill(allLines);
 
 //        якщо вказано декілька потоків:
         if (numberThreads > 1) {
@@ -106,7 +109,8 @@ public class Main {
             }
         } else {// в однопотоковому режимі
             List<String> allObj = AllObjects.getList(allLines, 0, 1);
-            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases());
+//            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObj, BuildCases.getCases());
+            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObj,vocabulary.getMap(), BuildCases.getCases());
         }
 
         ReadWriteFile.write(listWrongObj, pullNameCases, inputFileName, splitter, prefixFileName, formDate);
