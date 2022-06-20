@@ -28,7 +28,7 @@ public class ReadWriteFile {
         return String.format("%s_%s%s.txt", prefixFileName, nameCases, date);
     }
 
-    public static String write(List<WrongObj> wObjs, List<String> pullNameCases, String inputFileName, String splitter, String prefixFileName, String formDate) {
+    public static String write(List<WrongObj> wObjs, List<String> pullNameCases, String inputFileName, /*String splitter,*/ String prefixFileName, String formDate, List<String> allLines) {
         String nameInputFile = generateNameFile(prefixFileName, pullNameCases, formDate);
         try (Writer w = new FileWriter(nameInputFile)) {
             StringBuilder sb = new StringBuilder("Перевірено файл: ");
@@ -37,14 +37,7 @@ public class ReadWriteFile {
                 w.write(sb.toString());
                 w.write("Помилок не знайдено");
             } else {
-                int count = wObjs.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
-                sb.append(String.format("Знайдено %s помилок\n\n", count));
-                wObjs = wObjs.stream().sorted().collect(Collectors.toList());
-                for (WrongObj obj : wObjs) {
-                    sb.append(obj.getName());
-                    sb.append(splitter);
-                    sb.append(obj.printNumbers() + '\n');
-                }
+                sb.append(generateTextForReport(wObjs, pullNameCases, inputFileName, allLines));
                 w.write(sb.toString());
             }
         } catch (IOException e) {
@@ -52,6 +45,25 @@ public class ReadWriteFile {
         }
         return nameInputFile;
     }
+
+    private static String generateTextForReport(List<WrongObj> wObjs, List<String> pullNameCases, String inputFileName, List<String> allLines) {
+        StringBuilder text = new StringBuilder();
+        text.append("За кейсами: ");
+        text.append(pullNameCases.stream().collect(Collectors.joining(", ", "", ";\n")));
+        int count = wObjs.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
+        text.append("Знайдено співпадінь: " + count + "\n\n");
+        List<WrongObj> sortedWObj = wObjs.stream().sorted(WrongObj::compareTo).collect(Collectors.toList());
+        for (WrongObj wo : sortedWObj) {
+            List<Integer> numbers = wo.getNumberLines().stream().sorted().collect(Collectors.toList());
+            text.append(wo.getName() + " " + wo.printNumbers() + '\n');
+            for (int numberLine : numbers) {
+                text.append("  " + numberLine + " \"" + allLines.get(numberLine - 1).trim() + "\"\n");
+            }
+            text.append('\n');
+        }
+        return text.toString();
+    }
+
 
     public static List<String> readInputFile(String nameFiles) throws IOException {
         List<String> listAllLines = new ArrayList<>();
