@@ -8,7 +8,6 @@ public class Config {
     private static final String FILE_PROP = "app_wr.config";
 
     public static final String INPUT_FILE_NAME = "app.input_file";
-    public static final String SPLITTER = "app.splitter";
 
     private static final String CASES_COMMENT = "#cases: 1 включено, 0 вимкнено";
     public static final String CASE_INCLUDE = "app.case.include";
@@ -25,7 +24,6 @@ public class Config {
     private static final String MANUAL_COMMENT = "# %1%s підставляє ім'я об'єкту";
 
     public static final String INPUT_FILE_NAME_VAL = "apiary.apib";
-    public static final String SPLITTER_VAL = "=";
 
     public static final int CASE_INCLUDE_VAL = 0;
     public static final int CASE_ATTRIBUTE_VAL = 0;
@@ -64,8 +62,7 @@ public class Config {
 
     private static void buildNewPropertiesFile() {
         try (Writer w = new FileWriter(FILE_PROP);) {
-            w.write(String.format("%s=%s\n", INPUT_FILE_NAME, INPUT_FILE_NAME_VAL));
-            w.write(String.format("%s=%s\n\n", SPLITTER, SPLITTER_VAL));
+            w.write(String.format("%s=%s\n\n", INPUT_FILE_NAME, INPUT_FILE_NAME_VAL));
 
             w.write(String.format("%s\n", CASES_COMMENT));
             w.write(String.format("%s=%s\n", CASE_INCLUDE, CASE_INCLUDE_VAL));

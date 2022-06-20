@@ -32,7 +32,6 @@ public class Main {
         String inputFileName;
         String formDate;
         String prefixFileName;
-        String splitter;
         String manualRegExp;
         int isCaseInclude, isCaseAttribute, isCaseDataArray, isCaseData, isCaseFullOptions, isCaseManual;
         int numberThreads;
@@ -46,7 +45,6 @@ public class Main {
             manualRegExp = prop.getProperty(Config.REGULAR_MANUAL_OPTIONS);
             formDate = prop.getProperty(Config.OUT_FILE_FORM_DATE);
             prefixFileName = prop.getProperty(Config.OUT_FILE_PREFIX);
-            splitter = prop.getProperty(Config.SPLITTER);
             inputFileName = prop.getProperty(INPUT_FILE_NAME);
             numberThreads = Integer.valueOf(prop.getProperty(Config.THREADS));
         } catch (NumberFormatException e) {
@@ -60,7 +58,6 @@ public class Main {
             manualRegExp = Config.REGULAR_MANUAL_VAL;
             formDate = Config.OUT_FILE_FORM_DATE_VAL;
             prefixFileName = Config.OUT_FILE_PREFIX_VAL;
-            splitter = Config.SPLITTER_VAL;
             inputFileName = Config.INPUT_FILE_NAME_VAL;
             numberThreads = Config.THREADS_VAL;
         }
