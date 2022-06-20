@@ -17,10 +17,10 @@ class WrongFindRegularTest {
 
     @BeforeAll
     static void getAllLines() {
-        listAllLines.add("`Test0` test1 test2!");
-        listAllLines.add("Test3 test4 test5,");
-        listAllLines.add("Test6 test5 test8");
-        listAllLines.add("Test9 test10 test11");
+        listAllLines.add("+ `Test0` test1 test2!");
+        listAllLines.add("+ Test3 test4 test5,");
+        listAllLines.add("+ Test6 test5 test8");
+        listAllLines.add("+ Test9 test10 test11");
     }
 
     @BeforeAll
@@ -32,7 +32,7 @@ class WrongFindRegularTest {
     @BeforeAll
     static public void getCases() {
         String regular = "(?<!`)\\b%1$s\\b(?!`)";//вважаємо помилкою об'єкт без лапок
-        Case case1 = new Case("testCase", "", "", regular);
+        Case case1 = new Case("testCase", "+", "", regular);
         cases.add(case1);
     }
 
