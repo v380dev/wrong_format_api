@@ -144,7 +144,7 @@ public class Main {
             vocabulary.fill(allLines);
 
             List<String> allObjs = AllObjects.getList(allLines, 0, 1);
-            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObjs, vocabulary.getMap(), cases);
+            listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObjs, vocabulary, cases);
 
             System.out.println("знайдено об'єктів: " + allObjs.size());
             System.out.println("сформовано словник, розміром: " + vocabulary.getMap().size());
