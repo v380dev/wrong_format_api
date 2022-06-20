@@ -55,7 +55,7 @@ public class ReadWriteFile {
         List<WrongObj> sortedWObj = wObjs.stream().sorted(WrongObj::compareTo).collect(Collectors.toList());
         for (WrongObj wo : sortedWObj) {
             List<Integer> numbers = wo.getNumberLines().stream().sorted().collect(Collectors.toList());
-            text.append(wo.getName() + " " + wo.printNumbers() + '\n');
+            text.append(wo.getName() /*+ " " + wo.printNumbers() */+ '\n');
             for (int numberLine : numbers) {
                 text.append("  " + numberLine + " \"" + allLines.get(numberLine - 1).trim() + "\"\n");
             }
