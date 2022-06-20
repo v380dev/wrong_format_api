@@ -23,13 +23,12 @@ public class CallSearchObjVocab implements Callable<HoldObjVoc> {
 
     @Override
     public HoldObjVoc call() {
-//        SearchObjVoc searchObjVoc = new SearchObjVoc();
         Thread t = Thread.currentThread();//log
         System.out.println(t.getName() + "   starts search objects and fill vocabulary");//log
         for (int i = startPosForObjSearch; i < allLines.size(); i += quentThr) {
             String currentLine = allLines.get(i);
             holdObjVoc.getListAllObj().addAll(AllObjects.getListFromOneLine(currentLine));
-            holdObjVoc.getVoc().fill(currentLine, i);
+            holdObjVoc.getVoc().fillFromOneLine(currentLine, i);
         }
         System.out.println(t.getName() + "   finished looking for objects and fill vocabulary");//log
         return holdObjVoc;

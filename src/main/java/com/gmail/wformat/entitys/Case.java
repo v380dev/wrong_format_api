@@ -8,11 +8,7 @@ public class Case {
     private final String preFilter;
     private final String regExp;
 
-//    public void setRegExp(String regExp) {
-//        this.regExp = regExp;
-//    }
-
-    public Case(String name, String prefix, String preFilter, String regExp/*, String excludeDescription*/) {
+    public Case(String name, String prefix, String preFilter, String regExp) {
         this.name = name;
         this.prefix = prefix;
         this.preFilter = preFilter;
