@@ -13,10 +13,10 @@ public class WrongFindRegular {
     //для однопотокового виконання
     public static List<WrongObj> getWrongObjList(List<String> allLines, List<String> allObjects, Vocabulary voc, List<Case> cases) {
         List<WrongObj> wrongObjs = new ArrayList<>();
-            for (String obj : allObjects) {
-                WrongObj wrongObj = getWrongObj(allLines,obj,voc,cases);
-                if(wrongObj!=null){
-                    wrongObjs.add(wrongObj);
+        for (String obj : allObjects) {
+            WrongObj wrongObj = getWrongObj(allLines, obj, voc, cases);
+            if (wrongObj != null) {
+                wrongObjs.add(wrongObj);
             }
         }
         return wrongObjs;
@@ -30,9 +30,11 @@ public class WrongFindRegular {
             List<Integer> indexes = voc.getMap().get(nameObj);
             for (Integer index : indexes) {
                 String currentLine = allLines.get(index);
-                Matcher matcher = pattern.matcher(currentLine);
-                if (matcher.find()) {
-                    wo.getNumberLines().add(index + 1);
+                if (currentLine.contains(caze.getPreFilter())) {
+                    Matcher matcher = pattern.matcher(currentLine);
+                    if (matcher.find()) {
+                        wo.getNumberLines().add(index + 1);
+                    }
                 }
             }
         }

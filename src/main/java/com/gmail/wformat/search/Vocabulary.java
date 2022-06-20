@@ -8,14 +8,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Vocabulary {
-    Map<String, List<Integer>> map;
-    private final String regular;
-    private final Pattern pattern;
+    private Map<String, List<Integer>> map;
+    private static final String regular = "\\b\\w{3,}\\b";
+    private static final Pattern pattern = Pattern.compile(regular);
 
     public Vocabulary() {
         map = new HashMap<>();
-        this.regular = "\\b\\w{3,}\\b";
-        this.pattern = Pattern.compile(regular);
     }
 
     public Map<String, List<Integer>> getMap() {
@@ -23,21 +21,13 @@ public class Vocabulary {
     }
 
     //для однопотокового виконання
-    public void fill(List<String> allLines) {
-        map = new HashMap<>();
+    public void fillFromAllLines(List<String> allLines) {
         for (int i = 0; i < allLines.size(); i++) {
-            Matcher matcher = pattern.matcher(allLines.get(i));
-            while (matcher.find()) {
-                String key = matcher.group();
-                List<Integer> list = map.getOrDefault(key, new ArrayList<>());
-                list.add(i);
-                map.put(key, list);
-            }
+            fillFromOneLine(allLines.get(i), i);
         }
     }
 
-    //для багатопотокового виконання
-    public void fill(String currentLine, int currentInd) {
+    public void fillFromOneLine(String currentLine, int currentInd) {
         Matcher matcher = pattern.matcher(currentLine);
         while (matcher.find()) {
             String key = matcher.group();

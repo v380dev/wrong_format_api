@@ -141,7 +141,7 @@ public class Main {
 
         } else {// в однопотоковому режимі
             var vocabulary = new Vocabulary();
-            vocabulary.fill(allLines);
+            vocabulary.fillFromAllLines(allLines);
 
             List<String> allObjs = AllObjects.getList(allLines, 0, 1);
             listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObjs, vocabulary, cases);
@@ -150,7 +150,7 @@ public class Main {
             System.out.println("сформовано словник, розміром: " + vocabulary.getMap().size());
         }
 
-        ReadWriteFile.write(listWrongObj, pullNameCases, inputFileName, splitter, prefixFileName, formDate);
+        ReadWriteFile.write(listWrongObj, pullNameCases, inputFileName, prefixFileName, formDate, allLines);
         if (listWrongObj.size() > 0) {
             int count = listWrongObj.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
             System.out.println(String.format("\nЗнайдено %s помилок", count));
