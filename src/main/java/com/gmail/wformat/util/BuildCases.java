@@ -9,7 +9,8 @@ import java.util.Set;
 
 public class BuildCases {
     public static final String PRE_INCLUDE = "include";
-    public static final String INCL_QUOTES = "\\+\\ *include\\ *\\(?.*((?<!`)\\b%1$s\\b)|(\\b%1$s\\b(?!`))";
+    //    public static final String INCL_QUOTES = "\\+\\ *include\\ *\\(?.*((?<!`)\\b%1$s\\b)|(\\b%1$s\\b(?!`))";
+    public static final String INCL_QUOTES = "(?<=\\+ *include *[^\\(]*)(((?<!`)\\b%1$s\\b)|(\\b%1$s\\b(?!`)))";
 
     public static final String PRE_ATTRIBUTES = "Attributes";
     public static final String ATTRIBUTES_QUOTES = "\\+\\ *Attributes\\ *\\(.*((?<!`)\\b%1$s\\b)|(\\b%1$s\\b(?!`))";
@@ -22,44 +23,45 @@ public class BuildCases {
 
     public static final String PRE_FULL_OPTIONS = "+";
     //    public static final String FULL_OPTIONS_QUOTES = "((?<!`)\\b%1$s\\b)|(\\b%1$s\\b(?!`))";
-    public static final String FULL_OPTIONS_QUOTES = "([\\(]\\b%1$s\\b)|(\\b%1$s\\b[\\)])";//якщо слово біля дужки, всередині
+//    public static final String FULL_OPTIONS_QUOTES =/ "([\\(]\\b%1$s\\b)|(\\b%1$s\\b[\\)])";//якщо слово біля дужки, всередині
+    public static final String FULL_OPTIONS_QUOTES = "(^[^-#]*(?<!`)(\\b%1$s\\b))|(^[^-#]*(\\b%1$s\\b)(?!`))";//якщо слово після тіре не потрапляє у виборку
 
 //    public static final String EXCLUDE_DESCRIPTIONS = "((?<!`)\\b%1$s\\b \\b\\w+\\b \\b\\w+\\b(?!`))|((?<!`)\\b\\w+\\b \\b%1$s\\b \\b\\w+\\b(?!`))|((?<!`)\\b\\w+\\b \\b\\w+\\b \\b%1$s\\b(?!`))";
 //    public static final String EXCLUDE_DESCRIPTIONS = "(\\(%1$s[,\\)])|(, %1$s\\))";
 
 
-    public static Case incl;// = new Case("include", "incl", PRE_INCLUDE, INCL_QUOTES/*, EXCLUDE_DESCRIPTIONS*/);
-    public static Case attr;// = new Case("attribute", "attr", PRE_ATTRIBUTES, ATTRIBUTES_QUOTES/*, EXCLUDE_DESCRIPTIONS*/);
-    public static Case dataArr;// = new Case("data_array", "d_arr", PRE_DATA_ARR, DATA_ARR_QUOTES/*, EXCLUDE_DESCRIPTIONS*/);
-    public static Case data;// = new Case("data", "data", PRE_DATA, DATA_QUOTES/*, EXCLUDE_DESCRIPTIONS*/);
-    public static Case fullOptions;// = new Case("fullOptions", "full", PRE_FULL_OPTIONS, FULL_OPTIONS_QUOTES/*, EXCLUDE_DESCRIPTIONS*/);
-    public static Case manualOptions;// = new Case("manualOptions", "manual", PRE_FULL_OPTIONS, null /*, EXCLUDE_DESCRIPTIONS*/);
+    public static Case incl;
+    public static Case attr;
+    public static Case dataArr;
+    public static Case data;
+    public static Case fullOptions;
+    public static Case manualOptions;
 
 
     private static Set<Case> cases = new HashSet<>();
 
     public static void addCaseInclude() {
-        incl = new Case("include", "incl", PRE_INCLUDE, INCL_QUOTES/*, EXCLUDE_DESCRIPTIONS*/);
+        incl = new Case("include", "incl", PRE_INCLUDE, INCL_QUOTES);
         cases.add(incl);
     }
 
     public static void addCaseAttribute() {
-        attr = new Case("attribute", "attr", PRE_ATTRIBUTES, ATTRIBUTES_QUOTES/*, EXCLUDE_DESCRIPTIONS*/);
+        attr = new Case("attribute", "attr", PRE_ATTRIBUTES, ATTRIBUTES_QUOTES);
         cases.add(attr);
     }
 
     public static void addCaseDataArr() {
-        dataArr = new Case("data_array", "d_arr", PRE_DATA_ARR, DATA_ARR_QUOTES/*, EXCLUDE_DESCRIPTIONS*/);
+        dataArr = new Case("data_array", "d_arr", PRE_DATA_ARR, DATA_ARR_QUOTES);
         cases.add(dataArr);
     }
 
     public static void addCaseData() {
-        data = new Case("data", "data", PRE_DATA, DATA_QUOTES/*, EXCLUDE_DESCRIPTIONS*/);
+        data = new Case("data", "data", PRE_DATA, DATA_QUOTES);
         cases.add(data);
     }
 
     public static void addFullOptions() {
-        fullOptions = new Case("fullOptions", "full", PRE_FULL_OPTIONS, FULL_OPTIONS_QUOTES/*, EXCLUDE_DESCRIPTIONS*/);
+        fullOptions = new Case("fullOptions", "full", PRE_FULL_OPTIONS, FULL_OPTIONS_QUOTES);
         cases.add(fullOptions);
     }
 
