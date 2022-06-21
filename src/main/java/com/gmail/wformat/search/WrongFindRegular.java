@@ -30,11 +30,9 @@ public class WrongFindRegular {
             List<Integer> indexes = voc.getMap().get(nameObj);
             for (Integer index : indexes) {
                 String currentLine = allLines.get(index);
-                if (currentLine.contains(caze.getPreFilter())) {
-                    Matcher matcher = pattern.matcher(currentLine);
-                    if (matcher.find()) {
-                        wo.getNumberLines().add(index + 1);
-                    }
+                Matcher matcher = pattern.matcher(currentLine);
+                if (matcher.find()) {
+                    wo.getNumberLines().add(index + 1);
                 }
             }
         }

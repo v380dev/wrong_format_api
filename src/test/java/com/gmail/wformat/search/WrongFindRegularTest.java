@@ -32,7 +32,7 @@ class WrongFindRegularTest {
     @BeforeAll
     static public void getCases() {
         String regular = "(?<!`)\\b%1$s\\b(?!`)";//вважаємо помилкою об'єкт без лапок
-        Case case1 = new Case("testCase", "+", "", regular);
+        Case case1 = new Case("testCase", /*"+",*/ "", regular);
         cases.add(case1);
     }
 
