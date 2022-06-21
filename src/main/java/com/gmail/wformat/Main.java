@@ -26,7 +26,7 @@ import static com.gmail.wformat.util.Config.INPUT_FILE_NAME;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
-        Long time = System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         Properties prop = Config.getPropertiesFile();
 
         String inputFileName;
@@ -36,17 +36,17 @@ public class Main {
         int isCaseInclude, isCaseAttribute, isCaseDataArray, isCaseData, isCaseFullOptions, isCaseManual;
         int numberThreads;
         try {
-            isCaseInclude = Integer.valueOf(prop.getProperty(Config.CASE_INCLUDE));
-            isCaseAttribute = Integer.valueOf(prop.getProperty(Config.CASE_ATTRIBUTE));
-            isCaseDataArray = Integer.valueOf(prop.getProperty(Config.CASE_DATA_ARRAY));
-            isCaseFullOptions = Integer.valueOf(prop.getProperty(Config.CASE_FULL_OPTIONS));
-            isCaseData = Integer.valueOf(prop.getProperty(Config.CASE_DATA));
-            isCaseManual = Integer.valueOf(prop.getProperty(Config.CASE_MANUAL_OPTIONS));
+            isCaseInclude = Integer.parseInt(prop.getProperty(Config.CASE_INCLUDE));
+            isCaseAttribute = Integer.parseInt(prop.getProperty(Config.CASE_ATTRIBUTE));
+            isCaseDataArray = Integer.parseInt(prop.getProperty(Config.CASE_DATA_ARRAY));
+            isCaseFullOptions = Integer.parseInt(prop.getProperty(Config.CASE_FULL_OPTIONS));
+            isCaseData = Integer.parseInt(prop.getProperty(Config.CASE_DATA));
+            isCaseManual = Integer.parseInt(prop.getProperty(Config.CASE_MANUAL_OPTIONS));
             manualRegExp = prop.getProperty(Config.REGULAR_MANUAL_OPTIONS);
             formDate = prop.getProperty(Config.OUT_FILE_FORM_DATE);
             prefixFileName = prop.getProperty(Config.OUT_FILE_PREFIX);
             inputFileName = prop.getProperty(INPUT_FILE_NAME);
-            numberThreads = Integer.valueOf(prop.getProperty(Config.THREADS));
+            numberThreads = Integer.parseInt(prop.getProperty(Config.THREADS));
         } catch (NumberFormatException e) {
             e.printStackTrace();
             isCaseInclude = Config.CASE_INCLUDE_VAL;
