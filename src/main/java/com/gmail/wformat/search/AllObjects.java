@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class AllObjects {
     public static final String REG_OBJ = "(?<=#.*`)\\w+(?=`)";
-    private static Pattern pattern = Pattern.compile(REG_OBJ);
+    private static final Pattern pattern = Pattern.compile(REG_OBJ);
 
     public static List<String> getList(List<String> listAllLine, int startPos, int quantThreads) {
         List<String> listAllObj = new ArrayList<>();

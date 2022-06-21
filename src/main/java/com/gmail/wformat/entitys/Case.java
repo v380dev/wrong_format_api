@@ -5,20 +5,13 @@ import java.util.Objects;
 public class Case {
     private final String name;
     private final String prefix;
-    private final String preFilter;
     private final String regExp;
 
-    public Case(String name, String prefix, String preFilter, String regExp) {
+    public Case(String name, String prefix, String regExp) {
         this.name = name;
         this.prefix = prefix;
-        this.preFilter = preFilter;
         this.regExp = regExp;
     }
-
-    public String getPreFilter() {
-        return preFilter;
-    }
-
 
     public String getName() {
         return name;
@@ -35,12 +28,11 @@ public class Case {
         Case aCase = (Case) o;
         return Objects.equals(name, aCase.name) &&
                 Objects.equals(prefix, aCase.prefix) &&
-                Objects.equals(preFilter, aCase.preFilter) &&
                 Objects.equals(regExp, aCase.regExp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, prefix, preFilter, regExp);
+        return Objects.hash(name, prefix, regExp);
     }
 }
