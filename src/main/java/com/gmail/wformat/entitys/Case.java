@@ -17,6 +17,10 @@ public class Case {
         return name;
     }
 
+    public String getPrefix() {
+        return prefix;
+    }
+
     public String getRegExp() {
         return regExp;
     }
@@ -35,4 +39,5 @@ public class Case {
     public int hashCode() {
         return Objects.hash(name, prefix, regExp);
     }
+
 }

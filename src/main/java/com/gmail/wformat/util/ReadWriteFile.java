@@ -22,11 +22,8 @@ public class ReadWriteFile {
             e.printStackTrace();
             date = formDate;
         }
-        StringBuilder nameCases = new StringBuilder();
-        for (Case cs : cases) {
-            nameCases.append(cs.getName() + "_");
-        }
-        return String.format("%s_%s%s.txt", prefixFileName, nameCases, date);
+        String prefixCases = cases.stream().map(Case::getPrefix).collect(Collectors.joining("_"));
+        return String.format("%1$s_%2$s_%3$s.txt", prefixFileName, prefixCases, date);
     }
 
     public static String write(List<WrongObj> wObjs, List<Case> cases, String inputFileName, String prefixFileName, String formDate, List<String> allLines) {
