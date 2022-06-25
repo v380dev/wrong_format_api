@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="include"
+          class="com.gmail.wformat.entitys.Case">
+        <constructor-arg name="name" value="include"/>
+        <constructor-arg name="prefix" value="incl"/>
+        <constructor-arg name="regExp" value="^ *\+ *include *.*(?&lt;!`)\b%1$s\b|^ *\+ *include *.*\b%1$s\b(?!`)"/>
+    </bean>
+    <bean id="attribute"
+          class="com.gmail.wformat.entitys.Case">
+        <constructor-arg name="name" value="attribute"/>
+        <constructor-arg name="prefix" value="attr"/>
+        <constructor-arg name="regExp" value="^ *\+ *Attributes *\(.*(?&lt;!`)\b%1$s\b|^ *\+ *Attributes *\(.*\b%1$s\b(?!`)"/>
+    </bean>
+    <bean id="data_array"
+          class="com.gmail.wformat.entitys.Case">
+        <constructor-arg name="name" value="data_array"/>
+        <constructor-arg name="prefix" value="d_arr"/>
+        <constructor-arg name="regExp" value="^ *\+ *(data \(array) *\[.*(?&lt;!`)\b%1$s\b|^ *\+ *(data \(array) *\[.*\b%1$s\b(?!`)"/>
+    </bean>
+    <bean id="data"
+          class="com.gmail.wformat.entitys.Case">
+        <constructor-arg name="name" value="data"/>
+        <constructor-arg name="prefix" value="data"/>
+        <constructor-arg name="regExp" value="^ *\+ *data *\(.*(?&lt;!`)\b%1$s\b|^ *\+ *data *\(.*\b%1$s\b(?!`)"/>
+    </bean>
+    <bean id="fullOptions"
+          class="com.gmail.wformat.entitys.Case">
+        <constructor-arg name="name" value="fullOptions"/>
+        <constructor-arg name="prefix" value="full"/>
+        <constructor-arg name="regExp" value="^ *[\+][^-#]*(?&lt;!`)(\b%1$s\b)|^ *[\+][^-#]*(\b%1$s\b)(?!`)"/>
+    </bean>
+</beans>
