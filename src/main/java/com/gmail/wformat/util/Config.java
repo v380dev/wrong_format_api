@@ -4,36 +4,83 @@ import java.io.*;
 import java.util.Properties;
 
 public class Config {
-    public static final String THREADS = "app.threads";
-    private static final String FILE_PROP = "app_wr.config";
 
-    public static final String INPUT_FILE_NAME = "app.input_file";
+    public final String THREADS;
+    private final String FILE_PROP;
 
-    private static final String CASES_COMMENT = "#cases: 1 включено, 0 вимкнено";
-    public static final String CASE_INCLUDE = "app.case.include";
-    public static final String CASE_ATTRIBUTE = "app.case.attribute";
-    public static final String CASE_DATA_ARRAY = "app.case.data_array";
-    public static final String CASE_DATA = "app.case.data";
-    public static final String CASE_FULL_OPTIONS = "app.case.full_options";
+    public final String INPUT_FILE_NAME;
 
-    public static final String OUT_FILE_PREFIX = "app.out_file_name_prefix";
-    public static final String OUT_FILE_FORM_DATE = "app.out_file_form_date";
+    private final String CASES_COMMENT;
+    public final String CASE_INCLUDE;
+    public final String CASE_ATTRIBUTE;
+    public final String CASE_DATA_ARRAY;
+    public final String CASE_DATA;
+    public final String CASE_FULL_OPTIONS;
 
-    public static final String INPUT_FILE_NAME_VAL = "apiary.apib";
+    public final String OUT_FILE_PREFIX;
+    public final String OUT_FILE_FORM_DATE;
 
-    public static final int CASE_INCLUDE_VAL = 0;
-    public static final int CASE_ATTRIBUTE_VAL = 0;
-    public static final int CASE_DATA_ARRAY_VAL = 0;
-    public static final int CASE_DATA_VAL = 0;
-    public static final int CASE_FULL_OPTIONS_VAL = 0;
+    public final String INPUT_FILE_NAME_VAL;
 
-    public static final String OUT_FILE_PREFIX_VAL = "wrong";
-    public static final String OUT_FILE_FORM_DATE_VAL = "yyyy-MM-dd_HH-mm-ss";
+    public final int CASE_INCLUDE_VAL;
+    public final int CASE_ATTRIBUTE_VAL;
+    public final int CASE_DATA_ARRAY_VAL;
+    public final int CASE_DATA_VAL;
+    public final int CASE_FULL_OPTIONS_VAL;
 
-    public static final int THREADS_VAL = 4;
-    private static final String THREADS_COMMENT = "#кількість потоків:";
+    public final String OUT_FILE_PREFIX_VAL;
+    public final String OUT_FILE_FORM_DATE_VAL;
 
-    public static Properties getPropertiesFile() {
+    public final int THREADS_VAL;
+    private final String THREADS_COMMENT;
+
+    public Config(
+            String FILE_PROP,
+            String INPUT_FILE_NAME,
+            String INPUT_FILE_NAME_VAL,
+            String CASES_COMMENT,
+            String CASE_INCLUDE,
+            int CASE_INCLUDE_VAL,
+            String CASE_ATTRIBUTE,
+            int CASE_ATTRIBUTE_VAL,
+            String CASE_DATA_ARRAY,
+            int CASE_DATA_ARRAY_VAL,
+            String CASE_DATA,
+            int CASE_DATA_VAL,
+            String CASE_FULL_OPTIONS,
+            int CASE_FULL_OPTIONS_VAL,
+            String OUT_FILE_PREFIX,
+            String OUT_FILE_PREFIX_VAL,
+            String OUT_FILE_FORM_DATE,
+            String OUT_FILE_FORM_DATE_VAL,
+            String THREADS_COMMENT,
+            String THREADS,
+            int THREADS_VAL
+    ) {
+        this.THREADS = THREADS;
+        this.FILE_PROP = FILE_PROP;
+        this.INPUT_FILE_NAME = INPUT_FILE_NAME;
+        this.CASES_COMMENT = CASES_COMMENT;
+        this.CASE_INCLUDE = CASE_INCLUDE;
+        this.CASE_ATTRIBUTE = CASE_ATTRIBUTE;
+        this.CASE_DATA_ARRAY = CASE_DATA_ARRAY;
+        this.CASE_DATA = CASE_DATA;
+        this.CASE_FULL_OPTIONS = CASE_FULL_OPTIONS;
+        this.OUT_FILE_PREFIX = OUT_FILE_PREFIX;
+        this.OUT_FILE_FORM_DATE = OUT_FILE_FORM_DATE;
+        this.INPUT_FILE_NAME_VAL = INPUT_FILE_NAME_VAL;
+        this.CASE_INCLUDE_VAL = CASE_INCLUDE_VAL;
+        this.CASE_ATTRIBUTE_VAL = CASE_ATTRIBUTE_VAL;
+        this.CASE_DATA_ARRAY_VAL = CASE_DATA_ARRAY_VAL;
+        this.CASE_DATA_VAL = CASE_DATA_VAL;
+        this.CASE_FULL_OPTIONS_VAL = CASE_FULL_OPTIONS_VAL;
+        this.OUT_FILE_PREFIX_VAL = OUT_FILE_PREFIX_VAL;
+        this.OUT_FILE_FORM_DATE_VAL = OUT_FILE_FORM_DATE_VAL;
+        this.THREADS_VAL = THREADS_VAL;
+        this.THREADS_COMMENT = THREADS_COMMENT;
+    }
+
+    public Properties getPropertiesFile() {
         Properties prop = new Properties();
         try (FileInputStream in = new FileInputStream(FILE_PROP)) {
             prop.load(in);
@@ -53,7 +100,7 @@ public class Config {
         return prop;
     }
 
-    private static void buildNewPropertiesFile() {
+    private void buildNewPropertiesFile() {
         try (Writer w = new FileWriter(FILE_PROP);) {
             w.write(String.format("%s=%s\n\n", INPUT_FILE_NAME, INPUT_FILE_NAME_VAL));
             w.write(String.format("%s\n", CASES_COMMENT));

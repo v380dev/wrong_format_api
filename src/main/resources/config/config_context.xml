@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="config" class="com.gmail.wformat.util.Config">
+        <constructor-arg name="FILE_PROP" index="0" type="java.lang.String" value="app_wr.config"/>
+        <constructor-arg name="INPUT_FILE_NAME" index="1" type="java.lang.String" value="app.input_file"/>
+        <constructor-arg name="INPUT_FILE_NAME_VAL" index="2" type="java.lang.String" value="apiary.apib"/>
+        <constructor-arg name="CASES_COMMENT" index="3" type="java.lang.String" value="#cases: 1 включено, 0 вимкнено"/>
+        <constructor-arg name="CASE_INCLUDE" index="4" type="java.lang.String" value="app.case.include"/>
+        <constructor-arg name="CASE_INCLUDE_VAL" index="5" type="int" value="0"/>
+        <constructor-arg name="CASE_ATTRIBUTE" index="6" type="java.lang.String" value="app.case.attribute"/>
+        <constructor-arg name="CASE_ATTRIBUTE_VAL" index="7" type="int" value="0"/>
+        <constructor-arg name="CASE_DATA_ARRAY" index="8" type="java.lang.String" value="app.case.data_array"/>
+        <constructor-arg name="CASE_DATA_ARRAY_VAL" index="9" type="int" value="0"/>
+        <constructor-arg name="CASE_DATA" index="10" type="java.lang.String" value="app.case.data"/>
+        <constructor-arg name="CASE_DATA_VAL" index="11" type="int" value="0"/>
+        <constructor-arg name="CASE_FULL_OPTIONS" index="12" type="java.lang.String" value="app.case.full_options"/>
+        <constructor-arg name="CASE_FULL_OPTIONS_VAL" index="13" type="int" value="0"/>
+        <constructor-arg name="OUT_FILE_PREFIX" index="14" type="java.lang.String" value="app.out_file_name_prefix"/>
+        <constructor-arg name="OUT_FILE_PREFIX_VAL" index="15" type="java.lang.String" value="wrong"/>
+        <constructor-arg name="OUT_FILE_FORM_DATE" index="16" value="app.out_file_form_date"/>
+        <constructor-arg name="OUT_FILE_FORM_DATE_VAL" index="17" type="java.lang.String" value="yyyy-MM-dd_HH-mm-ss"/>
+        <constructor-arg name="THREADS_COMMENT" index="18" type="java.lang.String" value="#кількість потоків:"/>
+        <constructor-arg name="THREADS" index="19" type="java.lang.String" value="app.threads"/>
+        <constructor-arg name="THREADS_VAL" index="20" type="int" value="2"/>
+    </bean>
+</beans>
