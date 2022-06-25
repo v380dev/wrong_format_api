@@ -22,8 +22,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-//import static com.gmail.wformat.util.Config.INPUT_FILE_NAME;
-
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
         long time = System.currentTimeMillis();
