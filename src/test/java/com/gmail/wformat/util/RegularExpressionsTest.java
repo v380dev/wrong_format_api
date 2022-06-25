@@ -23,7 +23,7 @@ class RegularExpressionsTest {
 
     @BeforeAll
     static void buildCases() {
-        var context = new ClassPathXmlApplicationContext("case_context.xml");
+        var context = new ClassPathXmlApplicationContext("regex/case_context.xml");
         cases = new ArrayList<>();
         Case incl = context.getBean("include", Case.class);
         Case attr = context.getBean("attribute", Case.class);
