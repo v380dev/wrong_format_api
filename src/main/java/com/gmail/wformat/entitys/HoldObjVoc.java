@@ -1,6 +1,7 @@
 package com.gmail.wformat.entitys;
 
 import com.gmail.wformat.search.Vocabulary;
+import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,9 @@ public class HoldObjVoc {
     private List<String> listAllObj;
     private Vocabulary voc;
 
-    public HoldObjVoc() {
+    public HoldObjVoc(Vocabulary vocabulary) {
         this.listAllObj = new ArrayList<>();
-        this.voc = new Vocabulary();
+        this.voc = vocabulary;
     }
 
     public List<String> getListAllObj() {

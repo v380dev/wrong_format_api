@@ -5,7 +5,10 @@ import com.gmail.wformat.entitys.WrongObj;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +16,7 @@ class WrongFindRegularTest {
     static List<String> listAllLines = new ArrayList<>();
     static List<String> allObjs = new ArrayList<>();
     static List<Case> cases = new ArrayList<>();
-    static Vocabulary voc = new Vocabulary();
+    static Vocabulary voc=new Vocabulary(Pattern.compile(""));
 
     @BeforeAll
     static void getAllLines() {
@@ -35,7 +38,6 @@ class WrongFindRegularTest {
         Case case1 = new Case("testCase", /*"+",*/ "", regular);
         cases.add(case1);
     }
-
     @BeforeAll
     static public void getVocabulary() {
         List<Integer> t0 = new ArrayList<>();

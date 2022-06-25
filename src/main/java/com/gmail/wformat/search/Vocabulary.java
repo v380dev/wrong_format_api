@@ -9,10 +9,10 @@ import java.util.regex.Pattern;
 
 public class Vocabulary {
     private Map<String, List<Integer>> map;
-    private static final String regular = "\\b\\w{3,}\\b";
-    private static final Pattern pattern = Pattern.compile(regular);
+    private final Pattern pattern;
 
-    public Vocabulary() {
+    public Vocabulary(Pattern pattern) {
+        this.pattern = pattern;
         map = new HashMap<>();
     }
 

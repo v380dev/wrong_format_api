@@ -10,6 +10,7 @@ import com.gmail.wformat.threads.CallSearchObjVocab;
 import com.gmail.wformat.threads.CallSearchWrong;
 import com.gmail.wformat.util.Config;
 import com.gmail.wformat.util.ReadWriteFile;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
@@ -27,8 +28,9 @@ import static com.gmail.wformat.util.Config.INPUT_FILE_NAME;
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
         long time = System.currentTimeMillis();
-        var context = new ClassPathXmlApplicationContext("appContext.xml");
         Properties prop = Config.getPropertiesFile();
+        var caseContext = new ClassPathXmlApplicationContext("case_context.xml");
+        var utilContext = new ClassPathXmlApplicationContext("util_context.xml");
 
         String inputFileName;
         String formDate;
@@ -64,31 +66,34 @@ public class Main {
 
         List<Case> cases = new ArrayList<>();
         if (isCaseInclude == 1) {
-            cases.add(context.getBean("include", Case.class));
+            cases.add(caseContext.getBean("include", Case.class));
         }
         if (isCaseAttribute == 1) {
-            cases.add(context.getBean("attribute", Case.class));
+            cases.add(caseContext.getBean("attribute", Case.class));
         }
         if (isCaseDataArray == 1) {
-            cases.add(context.getBean("data_array", Case.class));
+            cases.add(caseContext.getBean("data_array", Case.class));
         }
         if (isCaseData == 1) {
-            cases.add(context.getBean("data", Case.class));
+            cases.add(caseContext.getBean("data", Case.class));
         }
         if (isCaseFullOptions == 1) {
-            cases.add(context.getBean("fullOptions", Case.class));
+            cases.add(caseContext.getBean("fullOptions", Case.class));
         }
+
+        Vocabulary vocabulary = utilContext.getBean("vocabulary", Vocabulary.class);
+        AllObjects allObj = utilContext.getBean("allObj", AllObjects.class);
 
         List<String> allLines = ReadWriteFile.readInputFile(inputFileName);
         List<WrongObj> listWrongObj = new ArrayList<>();
-        HoldObjVoc holdObjVoc = new HoldObjVoc();
 
 //        якщо вказано декілька потоків:
         if (numberThreads > 1) {
+            HoldObjVoc holdObjVoc = new HoldObjVoc(vocabulary);
             ExecutorService ex = Executors.newFixedThreadPool(numberThreads);
             List<CallSearchObjVocab> taskObjVoc = new ArrayList<>();
             for (int i = 0; i < numberThreads; i++) {
-                CallSearchObjVocab callSearchObjVocab = new CallSearchObjVocab(allLines, i, numberThreads);
+                CallSearchObjVocab callSearchObjVocab = new CallSearchObjVocab(allLines, i, numberThreads, vocabulary, allObj);
                 taskObjVoc.add(callSearchObjVocab);
             }
             List<Future<HoldObjVoc>> futureObjVoc = ex.invokeAll(taskObjVoc);
@@ -122,10 +127,9 @@ public class Main {
 
 
         } else {// в однопотоковому режимі
-            var vocabulary = new Vocabulary();
             vocabulary.fillFromAllLines(allLines);
 
-            List<String> allObjs = AllObjects.getList(allLines, 0, 1);
+            List<String> allObjs = allObj.getList(allLines, 0, 1);
             listWrongObj = WrongFindRegular.getWrongObjList(allLines, allObjs, vocabulary, cases);
 
             System.out.println("знайдено об'єктів: " + allObjs.size());

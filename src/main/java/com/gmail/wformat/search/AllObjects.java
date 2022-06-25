@@ -6,10 +6,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AllObjects {
-    public static final String REG_OBJ = "(?<=#.*`)\\w+(?=`)";
-    private static final Pattern pattern = Pattern.compile(REG_OBJ);
+    private final Pattern pattern;
 
-    public static List<String> getList(List<String> listAllLine, int startPos, int quantThreads) {
+    public AllObjects(Pattern pattern) {
+        this.pattern = pattern;
+    }
+
+    public List<String> getList(List<String> listAllLine, int startPos, int quantThreads) {
         List<String> listAllObj = new ArrayList<>();
         for (int i = startPos; i < listAllLine.size(); i += quantThreads) {
             String currentLine = listAllLine.get(i);
@@ -21,7 +24,7 @@ public class AllObjects {
         return listAllObj;
     }
 
-    public static List<String> getListFromOneLine(String currentLine) {
+    public List<String> getListFromOneLine(String currentLine) {
         List<String> listAllObj = new ArrayList<>();
         Matcher matcher = pattern.matcher(currentLine);
         while (matcher.find()) {
