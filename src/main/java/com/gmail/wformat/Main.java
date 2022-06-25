@@ -1,16 +1,16 @@
 package com.gmail.wformat;
 
 import com.gmail.wformat.entitys.Case;
+import com.gmail.wformat.entitys.HoldObjVoc;
 import com.gmail.wformat.entitys.WrongObj;
 import com.gmail.wformat.search.AllObjects;
-import com.gmail.wformat.entitys.HoldObjVoc;
 import com.gmail.wformat.search.Vocabulary;
 import com.gmail.wformat.search.WrongFindRegular;
 import com.gmail.wformat.threads.CallSearchObjVocab;
 import com.gmail.wformat.threads.CallSearchWrong;
-import com.gmail.wformat.util.BuildCases;
 import com.gmail.wformat.util.Config;
 import com.gmail.wformat.util.ReadWriteFile;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,13 +27,13 @@ import static com.gmail.wformat.util.Config.INPUT_FILE_NAME;
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
         long time = System.currentTimeMillis();
+        var context = new ClassPathXmlApplicationContext("appContext.xml");
         Properties prop = Config.getPropertiesFile();
 
         String inputFileName;
         String formDate;
         String prefixFileName;
-        String manualRegExp;
-        int isCaseInclude, isCaseAttribute, isCaseDataArray, isCaseData, isCaseFullOptions, isCaseManual;
+        int isCaseInclude, isCaseAttribute, isCaseDataArray, isCaseData, isCaseFullOptions;
         int numberThreads;
         try {
             isCaseInclude = Integer.parseInt(prop.getProperty(Config.CASE_INCLUDE));
@@ -41,8 +41,6 @@ public class Main {
             isCaseDataArray = Integer.parseInt(prop.getProperty(Config.CASE_DATA_ARRAY));
             isCaseFullOptions = Integer.parseInt(prop.getProperty(Config.CASE_FULL_OPTIONS));
             isCaseData = Integer.parseInt(prop.getProperty(Config.CASE_DATA));
-            isCaseManual = Integer.parseInt(prop.getProperty(Config.CASE_MANUAL_OPTIONS));
-            manualRegExp = prop.getProperty(Config.REGULAR_MANUAL_OPTIONS);
             formDate = prop.getProperty(Config.OUT_FILE_FORM_DATE);
             prefixFileName = prop.getProperty(Config.OUT_FILE_PREFIX);
             inputFileName = prop.getProperty(INPUT_FILE_NAME);
@@ -54,49 +52,36 @@ public class Main {
             isCaseDataArray = Config.CASE_DATA_ARRAY_VAL;
             isCaseData = Config.CASE_DATA_VAL;
             isCaseFullOptions = Config.CASE_FULL_OPTIONS_VAL;
-            isCaseManual = Config.CASE_MANUAL_OPTIONS_VAL;
-            manualRegExp = Config.REGULAR_MANUAL_VAL;
             formDate = Config.OUT_FILE_FORM_DATE_VAL;
             prefixFileName = Config.OUT_FILE_PREFIX_VAL;
             inputFileName = Config.INPUT_FILE_NAME_VAL;
             numberThreads = Config.THREADS_VAL;
         }
-        if (isCaseFullOptions == 0 && isCaseInclude == 0 && isCaseAttribute == 0 && isCaseDataArray == 0 && isCaseData == 0 && isCaseManual == 0) {
+        if (isCaseFullOptions == 0 && isCaseInclude == 0 && isCaseAttribute == 0 && isCaseDataArray == 0 && isCaseData == 0) {
             System.out.println("\nне обрано жодного кейсу");
             return;
         }
 
-        List<String> pullNameCases = new ArrayList<>();
+        List<Case> cases = new ArrayList<>();
         if (isCaseInclude == 1) {
-            BuildCases.addCaseInclude();
-            pullNameCases.add(BuildCases.incl.getName());
+            cases.add(context.getBean("include", Case.class));
         }
         if (isCaseAttribute == 1) {
-            BuildCases.addCaseAttribute();
-            pullNameCases.add(BuildCases.attr.getName());
+            cases.add(context.getBean("attribute", Case.class));
         }
         if (isCaseDataArray == 1) {
-            BuildCases.addCaseDataArr();
-            pullNameCases.add(BuildCases.dataArr.getName());
+            cases.add(context.getBean("data_array", Case.class));
         }
         if (isCaseData == 1) {
-            BuildCases.addCaseData();
-            pullNameCases.add(BuildCases.data.getName());
+            cases.add(context.getBean("data", Case.class));
         }
         if (isCaseFullOptions == 1) {
-            BuildCases.addFullOptions();
-            pullNameCases.add(BuildCases.fullOptions.getName());
-        }
-        if (isCaseManual == 1) {
-            BuildCases.addManualOptions(manualRegExp);
-            pullNameCases.add(BuildCases.manualOptions.getName());
-            System.out.println(manualRegExp);
+            cases.add(context.getBean("fullOptions", Case.class));
         }
 
         List<String> allLines = ReadWriteFile.readInputFile(inputFileName);
         List<WrongObj> listWrongObj = new ArrayList<>();
         HoldObjVoc holdObjVoc = new HoldObjVoc();
-        List<Case> cases = BuildCases.getCases();
 
 //        якщо вказано декілька потоків:
         if (numberThreads > 1) {
@@ -147,7 +132,7 @@ public class Main {
             System.out.println("сформовано словник, розміром: " + vocabulary.getMap().size());
         }
 
-        ReadWriteFile.write(listWrongObj, pullNameCases, inputFileName, prefixFileName, formDate, allLines);
+        ReadWriteFile.write(listWrongObj, cases, inputFileName, prefixFileName, formDate, allLines);
         if (listWrongObj.size() > 0) {
             int count = listWrongObj.stream().map(s -> s.getNumberLines().size()).mapToInt(i -> i).sum();
             System.out.println(String.format("\nЗнайдено %s помилок", count));
