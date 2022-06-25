@@ -35,3 +35,5 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <constructor-arg name="regExp" value="^ *[\+][^-#]*(?&lt;!`)(\b%1$s\b)|^ *[\+][^-#]*(\b%1$s\b)(?!`)"/>
     </bean>
 </beans>
+<!--    &lt;    замість символу <                   -->
+<!--    %1$s    підставляє ім'я об'єкта             -->
