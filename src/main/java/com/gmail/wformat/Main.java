@@ -10,7 +10,6 @@ import com.gmail.wformat.threads.CallSearchObjVocab;
 import com.gmail.wformat.threads.CallSearchWrong;
 import com.gmail.wformat.util.Config;
 import com.gmail.wformat.util.ReadWriteFile;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
@@ -23,14 +22,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import static com.gmail.wformat.util.Config.INPUT_FILE_NAME;
+//import static com.gmail.wformat.util.Config.INPUT_FILE_NAME;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
         long time = System.currentTimeMillis();
-        Properties prop = Config.getPropertiesFile();
-        var caseContext = new ClassPathXmlApplicationContext("case_context.xml");
-        var utilContext = new ClassPathXmlApplicationContext("util_context.xml");
+        var configContext = new ClassPathXmlApplicationContext("config/config_context.xml");
+        Config config = configContext.getBean("config", Config.class);
+        Properties prop = config.getPropertiesFile();
+        var caseContext = new ClassPathXmlApplicationContext("regex/case_context.xml");
+        var utilContext = new ClassPathXmlApplicationContext("regex/util_context.xml");
 
         String inputFileName;
         String formDate;
@@ -38,26 +39,26 @@ public class Main {
         int isCaseInclude, isCaseAttribute, isCaseDataArray, isCaseData, isCaseFullOptions;
         int numberThreads;
         try {
-            isCaseInclude = Integer.parseInt(prop.getProperty(Config.CASE_INCLUDE));
-            isCaseAttribute = Integer.parseInt(prop.getProperty(Config.CASE_ATTRIBUTE));
-            isCaseDataArray = Integer.parseInt(prop.getProperty(Config.CASE_DATA_ARRAY));
-            isCaseFullOptions = Integer.parseInt(prop.getProperty(Config.CASE_FULL_OPTIONS));
-            isCaseData = Integer.parseInt(prop.getProperty(Config.CASE_DATA));
-            formDate = prop.getProperty(Config.OUT_FILE_FORM_DATE);
-            prefixFileName = prop.getProperty(Config.OUT_FILE_PREFIX);
-            inputFileName = prop.getProperty(INPUT_FILE_NAME);
-            numberThreads = Integer.parseInt(prop.getProperty(Config.THREADS));
+            isCaseInclude = Integer.parseInt(prop.getProperty(config.CASE_INCLUDE));
+            isCaseAttribute = Integer.parseInt(prop.getProperty(config.CASE_ATTRIBUTE));
+            isCaseDataArray = Integer.parseInt(prop.getProperty(config.CASE_DATA_ARRAY));
+            isCaseFullOptions = Integer.parseInt(prop.getProperty(config.CASE_FULL_OPTIONS));
+            isCaseData = Integer.parseInt(prop.getProperty(config.CASE_DATA));
+            formDate = prop.getProperty(config.OUT_FILE_FORM_DATE);
+            prefixFileName = prop.getProperty(config.OUT_FILE_PREFIX);
+            inputFileName = prop.getProperty(config.INPUT_FILE_NAME);
+            numberThreads = Integer.parseInt(prop.getProperty(config.THREADS));
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            isCaseInclude = Config.CASE_INCLUDE_VAL;
-            isCaseAttribute = Config.CASE_ATTRIBUTE_VAL;
-            isCaseDataArray = Config.CASE_DATA_ARRAY_VAL;
-            isCaseData = Config.CASE_DATA_VAL;
-            isCaseFullOptions = Config.CASE_FULL_OPTIONS_VAL;
-            formDate = Config.OUT_FILE_FORM_DATE_VAL;
-            prefixFileName = Config.OUT_FILE_PREFIX_VAL;
-            inputFileName = Config.INPUT_FILE_NAME_VAL;
-            numberThreads = Config.THREADS_VAL;
+            isCaseInclude = config.CASE_INCLUDE_VAL;
+            isCaseAttribute = config.CASE_ATTRIBUTE_VAL;
+            isCaseDataArray = config.CASE_DATA_ARRAY_VAL;
+            isCaseData = config.CASE_DATA_VAL;
+            isCaseFullOptions = config.CASE_FULL_OPTIONS_VAL;
+            formDate = config.OUT_FILE_FORM_DATE_VAL;
+            prefixFileName = config.OUT_FILE_PREFIX_VAL;
+            inputFileName = config.INPUT_FILE_NAME_VAL;
+            numberThreads = config.THREADS_VAL;
         }
         if (isCaseFullOptions == 0 && isCaseInclude == 0 && isCaseAttribute == 0 && isCaseDataArray == 0 && isCaseData == 0) {
             System.out.println("\nне обрано жодного кейсу");
