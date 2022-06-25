@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class BuildCasesTest {
+class RegularExpressionsTest {
     static List<Case> cases;
 
     @BeforeAll
